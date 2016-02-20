@@ -1,12 +1,15 @@
-package AVL;
+package redBlackBST;
+
+import util.Color;
+import static util.Color.*;
 
 public class Node {
 	private int id;
 	private int count;
-	public Node left;
-	public Node right;
+	public Tree left;
+	public Tree right;
 	public Node parent;
-	private int bf;
+	private Color color;
 	
 	
 	public Node(int id){
@@ -15,7 +18,7 @@ public class Node {
 		left = null;
 		right = null;
 		parent = null;
-		setBf(0);
+		setColor(Black);
 	}
 	
 	public Node(int id, int count){
@@ -24,7 +27,7 @@ public class Node {
 		left = null;
 		right = null;
 		parent = null;
-		setBf(0);
+		setColor(Black);
 	}
 
 	public int getCount() {
@@ -39,11 +42,11 @@ public class Node {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getBf() {
-		return bf;
+	public Color getColor() {
+		return color;
 	}
-	public void setBf(int bf) {
-		this.bf = bf;
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public void increaseCount(int amount){
@@ -51,19 +54,6 @@ public class Node {
 	}
 	public void decreaseCount(int amount){
 		this.count -= amount;
-	}
-	
-	public void increaseBf(int amount){
-		if(this.bf + 1 > 2){
-			System.out.println("BF too high at " + id);
-		}
-		this.bf += amount;
-	}
-	public void decreaseBf(int amount){
-		if(this.bf + 1 < -2){
-			System.out.println("BF too low at " + id);
-		}
-		this.bf -= amount;
 	}
 	
 	

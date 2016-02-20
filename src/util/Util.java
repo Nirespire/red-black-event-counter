@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import AVL.Node;
+import redBlackBST.Node;
 
 public class Util {
 	public static Node[] readInputFile(String filename){

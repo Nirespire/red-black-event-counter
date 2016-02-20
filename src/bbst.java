@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-import AVL.Node;
+import redBlackBST.Node;
 import util.Util;
 
 public class bbst {
