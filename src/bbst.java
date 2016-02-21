@@ -13,6 +13,7 @@ public class bbst {
 		}
 		else{
 			Scanner input = new Scanner(System.in);
+			System.out.println("Input filename: ");
 			filename = input.next();
 			input.close();
 		}
