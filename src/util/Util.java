@@ -1,5 +1,7 @@
 package util;
 
+import static util.Color.RED;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -43,41 +45,70 @@ public class Util {
 	}
 
 	public static void printTree(Node root) {
-		if(root == null){
+		if (root == null) {
 			return;
 		}
-		
+
 		printTree(root.left());
 		System.out.println(root.getKey());
 		printTree(root.right());
 	}
-	
-	public static boolean checkValidBST(Node root){
-		if(root == null){
+
+	public static void printTree2(Node root, int indent) {
+
+		for (int i = 0; i < indent; i++) {
+			System.out.print("   ");
+		}
+		if (root == null) {
+			System.out.println("null");
+			return;
+		}
+		System.out.println(root.getValue());
+		if (root.left() == null && root.right() == null) {
+			return;
+		}
+		printTree2(root.left(), indent + 1);
+		printTree2(root.right(), indent + 1);
+	}
+
+	public static boolean checkValidBST(Node root) {
+		if (root == null) {
 			return true;
 		}
-		
-		if(root.left() == null && root.right() == null){
+
+		if (root.left() == null && root.right() == null) {
 			return true;
 		}
-		
+
 		boolean leftValid = true;
 		boolean rightValid = true;
-		
-		if(root.left() != null && root.left().getKey() > root.getKey()){
-			return false;	
-		}
-		else{
+
+		if (root.left() != null && root.left().getKey() > root.getKey()) {
+			return false;
+		} else {
 			leftValid = checkValidBST(root.left());
 		}
-		
-		if(root.right() != null && root.right().getKey() < root.getKey()){
+
+		if (root.right() != null && root.right().getKey() < root.getKey()) {
 			return false;
-		}
-		else{
+		} else {
 			rightValid = checkValidBST(root.right());
 		}
-		
+
 		return leftValid && rightValid;
 	}
+
+	public static boolean checkBalancedRbBST(Node root, int black) {
+		Node x = root;
+		while (x != null) {
+			if (x.getColor() != RED)
+				black++;
+			x = x.left();
+		}
+		
+		if (root == null) return black == 0;
+        if (root.getColor() != RED) black--;
+        return checkBalancedRbBST(root.left(), black) && checkBalancedRbBST(root.right(), black);
+	}
+
 }
