@@ -12,8 +12,11 @@ public class TreeTest {
 
 	public final int NUM_NODES = 9000;
 	
+	public void checkValid(Node root) {
+		Assert.assertTrue(Util.checkValidBST(root));
+		Assert.assertTrue(Util.checkValidRbBST(root));
+	}
 	
-
 	/**
 	 * Creates Tree with inserting of increasing keys
 	 * 
@@ -27,8 +30,7 @@ public class TreeTest {
 			t.insert(i, i);
 		}
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 
 		return t;
 	}
@@ -51,12 +53,13 @@ public class TreeTest {
 			}
 
 			t.insert(val, val);
+			
+			checkValid(t.root);
+			
 			values.put(val, val);
 		}
 		
-		//Util.printTree(t.root);
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkValidRbBST(t.root));
+		checkValid(t.root);
 
 		return t;
 	}
@@ -77,8 +80,7 @@ public class TreeTest {
 			values.put(val, val);
 		}
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 
 		return t;
 	}
@@ -108,8 +110,7 @@ public class TreeTest {
 			}
 		}
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 	}
 	
 	@Test
@@ -135,38 +136,7 @@ public class TreeTest {
 		
 		Assert.assertTrue(i > 0);
 		
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
-		Assert.assertTrue(Util.checkValidBST(t.root));
-	}
-	
-	@Test
-	public void testNormalDelete(){
-		Tree t = buildIncreasingTree();
-		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root,0));
-		
-		Assert.assertTrue(t.delete(NUM_NODES-1));
-		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root,0));
-		
-		Assert.assertNull(t.getNode(NUM_NODES-1));
-	}
-	
-	@Test
-	public void testNormalDelete2(){
-		Tree t = buildRandomTree();
-		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root,0));
-		
-		Assert.assertTrue(t.delete(NUM_NODES/2));
-		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root,0));
-		
-		Assert.assertNull(t.getNode(NUM_NODES-1));
+		checkValid(t.root);
 	}
 
 	@Test
@@ -187,8 +157,7 @@ public class TreeTest {
 		Assert.assertNotNull(o);
 		Assert.assertEquals(NUM_NODES + 5, o.getValue());
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 	}
 
 	@Test
@@ -213,8 +182,7 @@ public class TreeTest {
 		Assert.assertNotNull(o);
 		Assert.assertEquals(5, o.getValue());
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 	}
 
 	@Test
@@ -235,8 +203,7 @@ public class TreeTest {
 		Assert.assertNotNull(o);
 		Assert.assertEquals(NUM_NODES - 5, o.getValue());
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 	}
 
 	@Test
@@ -259,8 +226,7 @@ public class TreeTest {
 		o = t.getNode(NUM_NODES + 10);
 		Assert.assertNull(o);
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 	}
 
 	@Test
@@ -282,8 +248,7 @@ public class TreeTest {
 		Node o = t.getNode(NUM_NODES);
 		Assert.assertNull(o);
 		
-		Assert.assertTrue(Util.checkValidBST(t.root));
-		Assert.assertTrue(Util.checkBalancedRbBST(t.root, 0));
+		checkValid(t.root);
 	}
 	
 //	@Test

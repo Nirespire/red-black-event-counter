@@ -50,7 +50,7 @@ public class Util {
 		}
 
 		printTree(root.left());
-		System.out.println(root.getKey());
+		System.out.println(root.getKey() + " " + root.getColor().name());
 		printTree(root.right());
 	}
 
@@ -63,7 +63,7 @@ public class Util {
 			System.out.println("null");
 			return;
 		}
-		System.out.println(root.getValue());
+		System.out.println(root.getValue() + " " + root.getColor().name());
 		if (root.left() == null && root.right() == null) {
 			return;
 		}
@@ -91,7 +91,7 @@ public class Util {
 		}
 
 		if (root.right() != null && root.right().getKey() < root.getKey()) {
-			System.out.println("BST violation: " + root.right().getKey() + " /< " + root.getKey());
+			System.out.println("BST violation: " + root.right().getKey() + " /> " + root.getKey());
 			return false;
 		} else {
 			rightValid = checkValidBST(root.right());
@@ -101,22 +101,29 @@ public class Util {
 	}
 	
 	public static boolean checkValidRbBST(Node root){
-		return verifyProperty1(root) && verifyProperty2(root) && verifyProperty4(root) && verifyProperty5(root, 0);
-	}
-
-	public static boolean checkBalancedRbBST(Node root, int black) {
-		Node x = root;
-		while (x != null) {
-			if (x.getColor() == BLACK)
-				black++;
-			x = x.left();
+		
+		boolean one = verifyProperty1(root);
+		boolean two = verifyProperty2(root);
+		boolean four = verifyProperty4(root);
+		try{
+			verifyProperty5(root);
 		}
-
-		if (root == null)
-			return black == 0;
-		if (root.getColor() != RED)
-			black--;
-		return checkBalancedRbBST(root.left(), black) && checkBalancedRbBST(root.right(), black);
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		};
+		
+		if(!one){
+			System.out.println("All Nodes not RED or BLACK");
+		}
+		if(!two){
+			System.out.println("Root not BLACK");
+		}
+		if(!four){
+			System.out.println("RED Nodes adjacent to each other");
+		}
+		
+		return one && two && four ;
 	}
 
 	// Property 1
@@ -150,8 +157,29 @@ public class Util {
 	
 	// Property 5
 	// All paths to external nodes should pass the same number of BLACK nodes
-	public static boolean verifyProperty5(Node n, int black){
-		return checkBalancedRbBST(n, black);
+	public static void verifyProperty5(Node root) throws Exception {
+	    verifyProperty5Helper(root, 0, -1);
+	}
+
+	private static int verifyProperty5Helper(Node n, int blackCount, int pathBlackCount) throws Exception {
+		if (n == null) {
+	        if (pathBlackCount == -1) {
+	            pathBlackCount = blackCount;
+	        } else {
+	            if(blackCount != pathBlackCount){
+	            	throw new Exception("BLACK height error");
+	            }
+	        }
+	        return pathBlackCount;
+	    }
+		
+		if (n.getColor() == Color.BLACK) {
+	        blackCount++;
+	    }
+	    
+	    pathBlackCount = verifyProperty5Helper(n.left(), blackCount, pathBlackCount);
+	    pathBlackCount = verifyProperty5Helper(n.right(), blackCount, pathBlackCount);
+	    return pathBlackCount;
 	}
 
 }
