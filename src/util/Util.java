@@ -1,6 +1,6 @@
 package util;
 
-import static util.Color.RED;
+import static util.Color.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -101,7 +101,7 @@ public class Util {
 	public static boolean checkBalancedRbBST(Node root, int black) {
 		Node x = root;
 		while (x != null) {
-			if (x.getColor() != RED)
+			if (x.getColor() == BLACK)
 				black++;
 			x = x.left();
 		}

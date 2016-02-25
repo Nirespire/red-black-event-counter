@@ -38,17 +38,16 @@ public class Tree {
 			root = newNode;
 		}
 
-		fixRB(newNode);
+		fixRBInsert(newNode);
 
 	}
 
-	// TODO
 	/**
 	 * Checks and fixes integrity of Red-Black properties
 	 * 
 	 * @param reference
 	 */
-	private void fixRB(Node reference) {
+	private void fixRBInsert(Node reference) {
 
 		// Check if root
 		if (reference.parent() == null) {
@@ -72,7 +71,7 @@ public class Tree {
 					reference.grandparent().left().setColor(BLACK);
 				}
 
-				fixRB(reference.grandparent());
+				fixRBInsert(reference.grandparent());
 			}
 			// LYr case
 			// LRr and LLr
@@ -86,7 +85,7 @@ public class Tree {
 					reference.grandparent().left().setColor(BLACK);
 				}
 
-				fixRB(reference.grandparent());
+				fixRBInsert(reference.grandparent());
 			}
 			// LLb case
 			else if (reference.grandparent() != null
@@ -122,7 +121,6 @@ public class Tree {
 			}
 
 		}
-
 	}
 
 	public Node getNode(int id) {
@@ -148,15 +146,154 @@ public class Tree {
 	}
 
 	// TODO
-	public void delete(int id) {
+	public boolean delete(int id) {
 
 		Node toDelete = getNode(id);
 
 		if (toDelete != null) {
-			if (toDelete.getColor() == RED) {
+			// Node is RED or root, no rebalancing needed
+			if (toDelete.getColor() == RED || toDelete.parent() == null) {
 				normalDelete(toDelete);
 			}
+			// Node is BLACK and not root (has parent), need to check which rebalance
+			else{
+				Node py = toDelete.parent();
+				Node y = py.left();
+				
+				if(toDelete == py.right()){
+					y = py.right();
+				}
+				
+				normalDelete(toDelete);
+				
+				fixRbDelete(y, py);
+				
+			}
+			return true;
 		}
+		else{
+			return false;
+		}
+	}
+	
+	// TODO
+	private void fixRbDelete(Node y, Node py){
+		/* 
+		 * y is deficient subtree
+		 * y could be null
+		 * 
+		 * Xcn 	-> 	X: y is R or L child of parent
+		 * 			c: y's sibling, v's color
+		 * 			n: number of v's RED children
+		 * 		   
+		 * 		   py				py
+		 * 		  /	 \		or 	   /  \
+		 * 		 v	  y			  y    v
+		 * 					
+		 */
+		
+		
+		// Moved deficiency to the root, done
+		if(py == null){
+			y.setColor(BLACK);
+			return;
+		}
+		
+		boolean isRight = false;
+		Node v = null;
+		
+		if(y == py.right()){
+			isRight = true;
+			v = py.left();
+		}
+		else{
+			v = py.right();
+		}
+		
+		// Rb0
+		if(isRight
+			&& (v == null || (v.getColor() == BLACK && v.redDegree() == 0))){
+			
+			// case 1: py is BLACK
+			if(py.getColor() == BLACK){
+				v.flipColor();
+				fixRbDelete(py, py.parent());
+			}
+			//  case 2: py is RED
+			else{
+				v.flipColor();
+				py.flipColor();
+				return;
+			}
+		}
+		
+		// Rb1
+		else if(isRight
+			&& (v == null || (v.getColor() == BLACK && v.redDegree() == 1))){
+			
+			// case 1: v's left child is RED
+			if(v != null && v.getColor() == RED){
+				leftRotate(py);
+				return;
+			}
+			// case 2: v's right child is RED
+			else if(py.right() != null && py.right().getColor() == RED){
+				leftRightRotate(py);
+				return;
+			}
+		}
+		
+		
+		// Rb2
+		else if(isRight
+				&& (v == null || (v.getColor() == BLACK && v.redDegree() == 2))){
+			
+			leftRightRotate(py);
+			return;
+		}
+		
+		/*
+		 * Rr(n) ->	n: red degree of v's right child w
+		 * 
+		 */
+		
+		// Rr(0)
+		else if(isRight
+				&& (v != null && v.getColor() == RED)
+				&& (v.right() == null || v.right().redDegree() == 0)){
+			leftRotate(py);
+			return;
+		}
+		
+		// Rr(1)
+		else if(isRight
+				&& (v != null && v.getColor() == RED)
+				&& v.right().redDegree() == 1){
+			
+			// case 1: w's red child is left child
+			if(v.right().left() != null && v.right().left().getColor() == RED){
+				leftRightRotate(py);
+				return;
+			}
+			// case 2: w's red child is right child
+// TODO CHECK THIS CASE
+			else if(v.right().right() != null && v.right().right().getColor() == RED){
+				
+				return;
+			}
+		}
+		
+		// TODO
+		// Rr(2) -> (same as Rr(1) case 2
+		else if(isRight
+				&& (v != null && v.getColor() == RED)
+				&& v.right().redDegree() == 2){
+			
+			return;
+		}
+		
+		
+		
 	}
 
 	/**

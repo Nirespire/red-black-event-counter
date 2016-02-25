@@ -121,6 +121,17 @@ public class Node {
 		return sum;
 	}
 	
+	public int redDegree(){
+		int sum = 0;
+		if(right != null && right.getColor() == RED){
+			sum++;
+		}
+		if(left != null && left.getColor() == RED){
+			sum++;
+		}
+		return sum;
+	}
+	
 	
 	
 	
