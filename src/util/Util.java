@@ -84,18 +84,24 @@ public class Util {
 		boolean rightValid = true;
 
 		if (root.left() != null && root.left().getKey() > root.getKey()) {
+			System.out.println("BST violation: " + root.left().getKey() + " /< " + root.getKey());
 			return false;
 		} else {
 			leftValid = checkValidBST(root.left());
 		}
 
 		if (root.right() != null && root.right().getKey() < root.getKey()) {
+			System.out.println("BST violation: " + root.right().getKey() + " /< " + root.getKey());
 			return false;
 		} else {
 			rightValid = checkValidBST(root.right());
 		}
 
 		return leftValid && rightValid;
+	}
+	
+	public static boolean checkValidRbBST(Node root){
+		return verifyProperty1(root) && verifyProperty2(root) && verifyProperty4(root) && verifyProperty5(root, 0);
 	}
 
 	public static boolean checkBalancedRbBST(Node root, int black) {
@@ -105,10 +111,47 @@ public class Util {
 				black++;
 			x = x.left();
 		}
-		
-		if (root == null) return black == 0;
-        if (root.getColor() != RED) black--;
-        return checkBalancedRbBST(root.left(), black) && checkBalancedRbBST(root.right(), black);
+
+		if (root == null)
+			return black == 0;
+		if (root.getColor() != RED)
+			black--;
+		return checkBalancedRbBST(root.left(), black) && checkBalancedRbBST(root.right(), black);
+	}
+
+	// Property 1
+	// All nodes RED or BLACK
+	public static boolean verifyProperty1(Node n) {
+		if (n == null)
+			return true;
+		boolean redOrBlack = n.getColor() == RED || n.getColor() == BLACK;
+		return redOrBlack && verifyProperty1(n.left()) && verifyProperty1(n.right());
+	}
+
+	// Property 2
+	// root is BLACK
+	public static boolean verifyProperty2(Node root) {
+		return root == null || root.getColor() == BLACK;
+	}
+
+	// Property 4
+	// No 2 RED nodes together
+	public static boolean verifyProperty4(Node n) {
+		if (n == null || n.getColor() == BLACK)
+			return true;
+		else {
+			return (n.left() == null || n.left().getColor() == BLACK)
+			&& (n.right() == null || n.right().getColor() == BLACK)
+			&& (n.parent() == null || n.parent().getColor() == BLACK)
+			&& verifyProperty4(n.left())
+			&& verifyProperty4(n.right());
+		}
+	}
+	
+	// Property 5
+	// All paths to external nodes should pass the same number of BLACK nodes
+	public static boolean verifyProperty5(Node n, int black){
+		return checkBalancedRbBST(n, black);
 	}
 
 }

@@ -48,6 +48,7 @@ public class Tree {
 	 * @param reference
 	 */
 	private void fixRBInsert(Node reference) {
+//		System.out.println(reference);
 
 		// Check if root
 		if (reference.parent() == null) {
@@ -60,64 +61,68 @@ public class Tree {
 		}
 		// All violations when 2 consecutive RED nodes
 		else if (reference.parent().getColor() == RED) {
-			// RYr case
+			// XYr cases
 			// RRr and RLr
-			if (reference.grandparent() != null && reference.grandparent().left() != null
-					&& reference.grandparent().left().getColor() == RED) {
+			if(reference.grandparent() != null
+					&& reference.parent() == reference.grandparent().right()
+					&& (reference.grandparent().left() != null && reference.grandparent().left().getColor() == RED)){
+				
 				reference.parent().setColor(BLACK);
 				reference.grandparent().setColor(RED);
-
-				if (reference.grandparent().left().getColor() == RED) {
-					reference.grandparent().left().setColor(BLACK);
-				}
+				reference.grandparent().left().setColor(BLACK);
 
 				fixRBInsert(reference.grandparent());
+				return;
 			}
-			// LYr case
+			
 			// LRr and LLr
-			else if (reference.grandparent() != null && reference.grandparent().right() != null
-					&& reference.grandparent().right().getColor() == RED) {
-
+			else if(reference.grandparent() != null
+					&& reference.parent() == reference.grandparent().left()
+					&& (reference.grandparent().right() != null && reference.grandparent().right().getColor() == RED)){
+				
 				reference.parent().setColor(BLACK);
 				reference.grandparent().setColor(RED);
-
-				if (reference.grandparent().right().getColor() == RED) {
-					reference.grandparent().left().setColor(BLACK);
-				}
+				reference.grandparent().right().setColor(BLACK);
 
 				fixRBInsert(reference.grandparent());
+				return;
 			}
+			
 			// LLb case
 			else if (reference.grandparent() != null
-					&& reference == reference.parent().left()
 					&& reference.parent() == reference.grandparent().left()
+					&& reference == reference.parent().left()
 					&& (reference.grandparent().right() == null || reference.grandparent().right().getColor() == BLACK)) {
 				
 				leftRotate(reference.grandparent());
+				return;
 			}
 			// RRb case
 			else if (reference.grandparent() != null
-					&& reference == reference.parent().right()
 					&& reference.parent() == reference.grandparent().right()
+					&& reference == reference.parent().right()
 					&& (reference.grandparent().left() == null || reference.grandparent().left().getColor() == BLACK)) {
 				
 				rightRotate(reference.grandparent());
+				return;
 			}
 			// LRb case
 			else if (reference.grandparent() != null
-					&& reference == reference.parent().right()
 					&& reference.parent() == reference.grandparent().left()
+					&& reference == reference.parent().right()
 					&& (reference.grandparent().right() == null || reference.grandparent().right().getColor() == BLACK)) {
 				
 				leftRightRotate(reference.grandparent());
+				return;
 			}
 			// RLb case
 			else if (reference.grandparent() != null
-					&& reference == reference.parent().left()
 					&& reference.parent() == reference.grandparent().right()
-					&& (reference.grandparent().right() == null || reference.grandparent().right().getColor() == BLACK)) {
+					&& reference == reference.parent().left()
+					&& (reference.grandparent().left() == null || reference.grandparent().left().getColor() == BLACK)) {
 				
 				rightLeftRotate(reference.grandparent());
+				return;
 			}
 
 		}
