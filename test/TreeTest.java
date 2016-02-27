@@ -12,7 +12,7 @@ public class TreeTest {
 
 	public final int NUM_NODES = 9000;
 	
-	public void checkValid(Node root) {
+	public static void checkValid(Node root) {
 		Assert.assertTrue(Util.checkValidBST(root));
 		Assert.assertTrue(Util.checkValidRbBST(root));
 	}

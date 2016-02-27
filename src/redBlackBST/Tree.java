@@ -196,42 +196,49 @@ public class Tree {
 
 	// TODO
 	private void fixRbDelete(Node y, Node py) {
-		/*
-		 * y is deficient subtree y could be null
-		 * 
-		 * Xcn -> X: y is R or L child of parent c: y's sibling, v's color n:
-		 * number of v's RED children
-		 * 
-		 * py py / \ or / \ v y y v
-		 * 
-		 */
+		 
+		//y is deficient subtree y could be null
 
 		// Moved deficiency to the root, done
 		if (py == null) {
+			System.out.println("Flip root");
 			y.setColor(BLACK);
 			return;
 		}
+		
+		System.out.println("Y = " + y.getValue());
+		System.out.println("py = " + py.getValue());
 
 		boolean isRight = false;
 		Node v = null;
 
 		if (y == py.right()) {
+			System.out.println("y is right");
 			isRight = true;
 			v = py.left();
 		} else {
+			System.out.println("y is left");
 			v = py.right();
 		}
-
-		// Rb0
+		
+		/*
+		 * Xcn -> 	X: y is R or L child of parent 
+		 * 			c: y's sibling, v's color 
+		 * 			n: number of v's RED children
+		 */
+		
+		// Rb0 and Lb0
 		if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 0))) {
 
 			// case 1: py is BLACK
 			if (py.getColor() == BLACK) {
+				System.out.println("Rb0 case 1");
 				v.flipColor();
 				fixRbDelete(py, py.parent());
 			}
 			// case 2: py is RED
 			else {
+				System.out.println("Rb0 case 2");
 				v.flipColor();
 				py.flipColor();
 				return;
@@ -303,30 +310,62 @@ public class Tree {
 	 */
 	private void normalDelete(Node n) {
 		int deg = n.degree();
+
 		if (deg == 0) {
 			if (n.parent() != null) {
-				if (n.left() == n)
-					n.setLeft(null);
-				else
-					n.setRight(null);
+				if (n.parent().left() == n) {
+					n.parent().setLeft(null);
+				} else {
+					n.parent().setRight(null);
+				}
 			}
-		} else if (deg == 1) {
-			if (n.left() != null) {
-				n.left().setParent(n.parent());
-				n.parent().setLeft(n.left());
-			} else {
-				n.right().setParent(n.parent());
-				n.parent().setRight(n.right());
+			// Node is root
+			else {
+				root = null;
 			}
-		} else if (deg == 2) {
+		} 
+		else if (deg == 1) {
+			if(n.parent() != null){
+				if (n.left() != null) {
+					n.left().setParent(n.parent());
+					n.parent().setLeft(n.left());
+				} 
+				else {
+					n.right().setParent(n.parent());
+					n.parent().setRight(n.right());
+				}
+			}
+			else{
+				if (n.left() != null) {
+					n.left().setParent(n.parent());
+					root = n.left();
+				} else {
+					n.right().setParent(n.parent());
+					root = n.right();
+				}
+				root.setColor(BLACK);
+			}
+		}
+		else if (deg == 2) {
 			Node min = getMinNode(n.right());
-			min.setRight(n.right());
+
+			if (n.right() != min) {
+				min.setRight(n.right());
+			} else {
+				min.setRight(null);
+			}
+
 			min.setLeft(n.left());
 
-			if (n.parent().left() == n) {
-				n.parent().setLeft(min);
+			if (n.parent() != null) {
+				if (n.parent().left() == n) {
+					n.parent().setLeft(min);
+				} else {
+					n.parent().setRight(min);
+				}
 			} else {
-				n.parent().setRight(min);
+				root = min;
+				root.setColor(BLACK);
 			}
 		}
 	}
@@ -375,74 +414,74 @@ public class Tree {
 		}
 	}
 
-	public void leftRotate(Node z) {
+	public Node leftRotate(Node z) {
 		System.out.println("L");
-		
+
 		Node y = z.left();
-	    z.setLeft(y.right());
-	    
-	    if (y.right() != null){
-	    	y.right().setParent(z);
-	    }
+		z.setLeft(y.right());
 
-	    y.setParent(z.parent());
+		if (y.right() != null) {
+			y.right().setParent(z);
+		}
 
-	    if (z.parent() == null ){
-	    	root = y;
-	    }
-	    else{
-	        if (z == z.parent().right()){
-	            z.parent().setRight(y);
-	        }
-	        else{
-	            z.parent().setLeft(y);
-	        }
-	    }
-	    
-	    y.setRight(z);
-	    z.setParent(y);
-	    
-	    y.flipColor();
+		y.setParent(z.parent());
+
+		if (z.parent() == null) {
+			root = y;
+		} else {
+			if (z == z.parent().right()) {
+				z.parent().setRight(y);
+			} else {
+				z.parent().setLeft(y);
+			}
+		}
+
+		y.setRight(z);
+		z.setParent(y);
+
+		y.flipColor();
 		z.flipColor();
+		
+		return y;
 
 	}
 
-	public void rightRotate(Node z) {
+	public Node rightRotate(Node z) {
 		System.out.println("R");
-		
-	    Node y = z.right();
-	    
-	    // Turn y's left sub-tree into x's right sub-tree
-	    z.setRight(y.left());
-	    if ( y.left() != null ){
-	    	y.left().setParent(z);
-	    }
-	    
-	    // y's new parent was x's parent
-	    y.setParent(z.parent());
-	    
-	    /* Set the parent to point to y instead of x */
-	    /* First see whether we're at the root */
-	    if (z.parent() == null ){
-	    	root = y;
-	    }
-	    else{
-	        if(z == z.parent().left()){
-	            /* x was on the left of its parent */
-	            z.parent().setLeft(y);
-	        }
-	        else{
-	            /* x must have been on the right */
-	            z.parent().setRight(y);
-	        }
-	    }
-	    
-	    /* Finally, put x on y's left */
-	    y.setLeft(z);
-	    z.setParent(y);
-	    
-	    y.flipColor();
+
+		Node y = z.right();
+
+		// Turn y's left sub-tree into x's right sub-tree
+		z.setRight(y.left());
+		if (y.left() != null) {
+			y.left().setParent(z);
+		}
+
+		// y's new parent was x's parent
+		y.setParent(z.parent());
+
+		/* Set the parent to point to y instead of x */
+		/* First see whether we're at the root */
+		if (z.parent() == null) {
+			root = y;
+		} else {
+			if (z == z.parent().left()) {
+				/* x was on the left of its parent */
+				z.parent().setLeft(y);
+			} else {
+				/* x must have been on the right */
+				z.parent().setRight(y);
+			}
+		}
+
+		/* Finally, put x on y's left */
+		y.setLeft(z);
+		z.setParent(y);
+
+		y.flipColor();
 		z.flipColor();
+		
+		return y;
 	}
 
 	public void leftRightRotate(Node z) {
