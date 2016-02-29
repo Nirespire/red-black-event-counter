@@ -25,7 +25,7 @@ public class Util {
 			output = new Node[count];
 
 			for (int i = 0; i < count; i++) {
-				line = br.readLine().split(",");
+				line = br.readLine().split(" ");
 				Node newNode = new Node(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
 				output[i] = newNode;
 			}

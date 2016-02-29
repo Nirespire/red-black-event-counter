@@ -163,6 +163,62 @@ public class Tree {
 		return (n == null ? 0 : n.getValue());
 	}
 
+	public Node getNextNode(int id) {
+		Node n = getNode(id);
+
+		if (n != null) {
+
+			// Node has no right subtree, follow path up until a left pointer is
+			// traversed
+			// Return parent of that first left pointer
+			if (n.right() == null) {
+				Node next = n.parent();
+
+				while (next != null && n != next.left()) {
+					n = next;
+					next = n.parent();
+				}
+
+				return next;
+
+			}
+
+			// Node has a right subtree, return min Node in that subtree
+			return getMinNode(n.right());
+
+		} else {
+			return null;
+		}
+	}
+	
+	public Node getPreviousNode(int id){
+		Node n = getNode(id);
+
+		if (n != null) {
+
+			// Node has no left subtree, follow path up until a left pointer is
+			// traversed
+			// Return parent of that first left pointer
+			if (n.left() == null) {
+				Node next = n.parent();
+
+				while (next != null && n != next.right()) {
+					n = next;
+					next = n.parent();
+				}
+
+				return next;
+
+			}
+
+			// Node has a left subtree, return max Node in that subtree
+			return getMaxNode(n.left());
+
+		} else {
+			return null;
+		}
+	}
+
 	// TODO
 	public boolean delete(int id) {
 
@@ -196,8 +252,8 @@ public class Tree {
 
 	// TODO
 	private void fixRbDelete(Node y, Node py) {
-		 
-		//y is deficient subtree y could be null
+
+		// y is deficient subtree y could be null
 
 		// Moved deficiency to the root, done
 		if (py == null) {
@@ -205,7 +261,7 @@ public class Tree {
 			y.setColor(BLACK);
 			return;
 		}
-		
+
 		System.out.println("Y = " + y.getValue());
 		System.out.println("py = " + py.getValue());
 
@@ -220,13 +276,12 @@ public class Tree {
 			System.out.println("y is left");
 			v = py.right();
 		}
-		
+
 		/*
-		 * Xcn -> 	X: y is R or L child of parent 
-		 * 			c: y's sibling, v's color 
-		 * 			n: number of v's RED children
+		 * Xcn -> X: y is R or L child of parent c: y's sibling, v's color n:
+		 * number of v's RED children
 		 */
-		
+
 		// Rb0 and Lb0
 		if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 0))) {
 
@@ -323,19 +378,16 @@ public class Tree {
 			else {
 				root = null;
 			}
-		} 
-		else if (deg == 1) {
-			if(n.parent() != null){
+		} else if (deg == 1) {
+			if (n.parent() != null) {
 				if (n.left() != null) {
 					n.left().setParent(n.parent());
 					n.parent().setLeft(n.left());
-				} 
-				else {
+				} else {
 					n.right().setParent(n.parent());
 					n.parent().setRight(n.right());
 				}
-			}
-			else{
+			} else {
 				if (n.left() != null) {
 					n.left().setParent(n.parent());
 					root = n.left();
@@ -345,8 +397,7 @@ public class Tree {
 				}
 				root.setColor(BLACK);
 			}
-		}
-		else if (deg == 2) {
+		} else if (deg == 2) {
 			Node min = getMinNode(n.right());
 
 			if (n.right() != min) {
@@ -387,12 +438,25 @@ public class Tree {
 
 		return parent;
 	}
+	
+	private Node getMaxNode(Node root){
+		Node current = root;
+		Node parent = null;
+
+		while (current != null) {
+			parent = current;
+			current = current.right();
+		}
+
+		return parent;
+	}
 
 	public int increase(int theID, int m) {
 		Node result = getNode(theID);
 
 		if (result != null) {
-			return getNode(theID).increaseValue(m);
+			return result.increaseValue(m);
+			
 		} else {
 			insert(theID, m);
 			return m;
@@ -403,8 +467,11 @@ public class Tree {
 		Node result = getNode(theID);
 
 		if (result != null) {
-			if (result.decreaseValue(m) > 0) {
-				return result.getValue();
+			int newVal = result.decreaseValue(m);
+			
+			if (newVal > 0) {
+				
+				return newVal;
 			} else {
 				delete(theID);
 				return 0;
@@ -441,7 +508,7 @@ public class Tree {
 
 		y.flipColor();
 		z.flipColor();
-		
+
 		return y;
 
 	}
@@ -480,8 +547,32 @@ public class Tree {
 
 		y.flipColor();
 		z.flipColor();
-		
+
 		return y;
+	}
+
+	private boolean validateNode(Node n) {
+		boolean isValid = true;
+
+		if (n.parent() != null) {
+			boolean isRight = (n.parent().right() == n ? true : false);
+
+			if (isRight) {
+				isValid = isValid && n.parent().getKey() < n.getKey();
+			} else {
+				isValid = isValid && n.parent().getKey() > n.getKey();
+			}
+		}
+
+		if (n.right() != null) {
+			isValid = isValid && n.right().getKey() > n.getKey();
+		}
+
+		if (n.left() != null) {
+			isValid = isValid && n.left().getKey() < n.getKey();
+		}
+
+		return isValid;
 	}
 
 	public void leftRightRotate(Node z) {

@@ -1,8 +1,17 @@
 import java.util.Scanner;
-
 import redBlackBST.Node;
 import redBlackBST.Tree;
 import util.Util;
+
+/*
+ * QUESTIONS FOR TA
+ * 
+ * For Next(theID) and Previous(theID), can we assume theID exists in the tree?
+ * 
+ * Same for inRange(id1, id2) can we assume both ids exist
+ * 
+ * When are we getting the input file
+ */
 
 public class bbst {
 
@@ -28,29 +37,29 @@ public class bbst {
 		}
 
 		String userInput;
-		
-		while(true){
+
+		while (true) {
 			userInput = input.nextLine();
-			
-			if(userInput.equals("exit")){
+
+			if (userInput.equals("exit")) {
 				input.close();
 				break;
 			}
-			
+
 			parseAndExcute(userInput);
 		}
 	}
-	
-	public static void parseAndExcute(String input){
-		
-		if(input == null){
+
+	public static void parseAndExcute(String input) {
+
+		if (input == null) {
 			return;
 		}
-		
+
 		String[] args = input.split(" ");
-		
-		if(args.length > 1){
-			switch(args[0]){
+
+		if (args.length > 1) {
+			switch (args[0]) {
 			case "increase":
 				increase(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 				break;
@@ -70,6 +79,7 @@ public class bbst {
 				previous(Integer.parseInt(args[1]));
 				break;
 			default:
+				System.out.println("invalid");
 				break;
 			}
 		}
@@ -83,7 +93,7 @@ public class bbst {
 	 * @param m
 	 */
 	public static void increase(int theID, int m) {
-
+		System.out.println(t.increase(theID, m));
 	}
 
 	/**
@@ -95,7 +105,7 @@ public class bbst {
 	 * @param m
 	 */
 	public static void reduce(int theID, int m) {
-
+		System.out.println(t.decrease(theID, m));
 	}
 
 	/**
@@ -105,11 +115,10 @@ public class bbst {
 	 */
 	public static void count(int theID) {
 		Node n = t.getNode(theID);
-		
-		if(n != null){
+
+		if (n != null) {
 			System.out.println(n.getValue());
-		}
-		else{
+		} else {
 			System.out.println(0);
 		}
 	}
@@ -133,7 +142,13 @@ public class bbst {
 	 * @param theID
 	 */
 	public static void next(int theID) {
+		Node n = t.getNextNode(theID);
 
+		if (n != null) {
+			System.out.println(n.getKey() + " " + n.getValue());
+		} else {
+			System.out.println("0 0");
+		}
 	}
 
 	/**
@@ -143,7 +158,13 @@ public class bbst {
 	 * @param theID
 	 */
 	public static void previous(int theID) {
+		Node n = t.getPreviousNode(theID);
 
+		if (n != null) {
+			System.out.println(n.getKey() + " " + n.getValue());
+		} else {
+			System.out.println("0 0");
+		}
 	}
 
 }

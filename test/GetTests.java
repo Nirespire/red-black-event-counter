@@ -229,4 +229,46 @@ public class GetTests {
 
 		checkValid(t.root);
 	}
+	
+	@Test
+	public void testGetNext(){
+		
+		Tree t = new Tree();
+		
+		for (int i = 1; i < 100 + 1; i++) {
+			t.insert(i, i);
+		}
+		
+		checkValid(t.root);
+		
+		for(int i = 1; i < 100; i++){
+			Node n = t.getNextNode(i);
+			
+			Assert.assertNotNull(n);
+			Assert.assertEquals(i+1, n.getKey());
+		}
+		
+		checkValid(t.root);
+	}
+	
+	@Test
+	public void testGetPrevious(){
+		
+		Tree t = new Tree();
+		
+		for (int i = 1; i < 100 + 1; i++) {
+			t.insert(i, i);
+		}
+		
+		checkValid(t.root);
+		
+		for(int i = 2; i < 100 + 1; i++){
+			Node n = t.getPreviousNode(i);
+			
+			Assert.assertNotNull(n);
+			Assert.assertEquals(i-1, n.getKey());
+		}
+		
+		checkValid(t.root);
+	}
 }
