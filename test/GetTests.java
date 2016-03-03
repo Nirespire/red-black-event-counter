@@ -252,6 +252,29 @@ public class GetTests {
 	}
 	
 	@Test
+	public void testGetNextNotExist(){
+		
+		Tree t = new Tree();
+		
+		for (int i = 1; i < 100 + 1; i++) {
+			t.insert(i, i);
+		}
+		
+		t.insert(200, 200);
+		
+		checkValid(t.root);
+		
+		for(int i = 101; i < 200; i++){
+			Node n = t.getNextNode(i);
+			
+			Assert.assertNotNull(n);
+			Assert.assertEquals(200, n.getKey());
+		}
+		
+		checkValid(t.root);
+	}
+	
+	@Test
 	public void testGetPrevious(){
 		
 		Tree t = new Tree();
@@ -267,6 +290,27 @@ public class GetTests {
 			
 			Assert.assertNotNull(n);
 			Assert.assertEquals(i-1, n.getKey());
+		}
+		
+		checkValid(t.root);
+	}
+	
+	@Test
+	public void testGetPreviousNotExist(){
+		
+		Tree t = new Tree();
+		
+		for (int i = 1; i < 100 + 1; i++) {
+			t.insert(i, i);
+		}
+		
+		checkValid(t.root);
+		
+		for(int i = 101; i < 200; i++){
+			Node n = t.getPreviousNode(i);
+			
+			Assert.assertNotNull(n);
+			Assert.assertEquals(100, n.getKey());
 		}
 		
 		checkValid(t.root);

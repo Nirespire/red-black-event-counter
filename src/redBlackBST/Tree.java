@@ -2,6 +2,8 @@ package redBlackBST;
 
 import static util.Color.*;
 
+import util.Pair;
+
 public class Tree {
 	public Node root;
 
@@ -163,60 +165,144 @@ public class Tree {
 		return (n == null ? 0 : n.getValue());
 	}
 
+	/**
+	 * Returns the node with min ID greater than input.
+	 * Returns "0 0" if no next exists.
+	 * Input ID does not need to exist in the tree.
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Node getNextNode(int id) {
-		Node n = getNode(id);
+		
+		Node current = root;
+		Node previous = null;
+		boolean wentLeft = false;
+		
+		while(current != null){
+			int val = current.getKey();
+			
+			// id exists in tree
+			if(val == id){
+				
+				// Node has no right subtree, follow path up until a left pointer is
+				// traversed
+				// Return parent of that first left pointer
+				if (current.right() == null) {
+					Node next = current.parent();
 
-		if (n != null) {
+					while (next != null && current != next.left()) {
+						current = next;
+						next = current.parent();
+					}
 
-			// Node has no right subtree, follow path up until a left pointer is
-			// traversed
-			// Return parent of that first left pointer
-			if (n.right() == null) {
-				Node next = n.parent();
-
-				while (next != null && n != next.left()) {
-					n = next;
-					next = n.parent();
+					return next;
 				}
 
-				return next;
-
+				// Node has a right subtree, return min Node in that subtree
+				return getMinNode(current.right());
 			}
-
-			// Node has a right subtree, return min Node in that subtree
-			return getMinNode(n.right());
-
-		} else {
-			return null;
+			else if(val < id){
+				previous = current;
+				current = current.right();
+				wentLeft = false;
+			}
+			else{
+				previous = current;
+				current = current.left();
+				wentLeft = true;
+			}
 		}
+		
+		
+		// Else, id doesn't exist in tree
+		// Current is null
+		
+		// Can't check if external node hanging off left or right by
+		// ref comparison, so just check first
+		if(wentLeft){
+			return previous;
+		}
+		
+		current = previous;
+		Node next = previous.parent();
+		
+		while (next != null && current != next.left()) {
+			current = next;
+			next = current.parent();
+		}
+
+		return next;
 	}
 	
+	/**
+	 * Returns the node with max ID less than input.
+	 * Returns "0 0" if no previous exists.
+	 * Input ID does not need to exist in the tree.
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Node getPreviousNode(int id){
-		Node n = getNode(id);
+		
+		Node current = root;
+		Node previous = null;
+		boolean wentRight = false;
+		
+		while(current != null){
+			int val = current.getKey();
+			
+			// id exists in tree
+			if(val == id){
+				
+				// Node has no left subtree, follow path up until a left pointer is
+				// traversed
+				// Return parent of that first left pointer
+				if (current.left() == null) {
+					Node next = current.parent();
 
-		if (n != null) {
+					while (next != null && current != next.right()) {
+						current = next;
+						next = current.parent();
+					}
 
-			// Node has no left subtree, follow path up until a left pointer is
-			// traversed
-			// Return parent of that first left pointer
-			if (n.left() == null) {
-				Node next = n.parent();
-
-				while (next != null && n != next.right()) {
-					n = next;
-					next = n.parent();
+					return next;
 				}
 
-				return next;
-
+				// Node has a left subtree, return max Node in that subtree
+				return getMaxNode(current.left());
 			}
-
-			// Node has a left subtree, return max Node in that subtree
-			return getMaxNode(n.left());
-
-		} else {
-			return null;
+			else if(val < id){
+				previous = current;
+				current = current.right();
+				wentRight = true;
+			}
+			else{
+				previous = current;
+				current = current.left();
+				wentRight = false;
+			}
 		}
+		
+		
+		// Else, id doesn't exist in tree
+		// Current is null
+		
+		// Can't check if external node hanging off left or right by
+		// ref comparison, so just check first
+		if(wentRight){
+			return previous;
+		}
+		
+		current = previous;
+		Node next = previous.parent();
+		
+		while (next != null && current != next.right()) {
+			current = next;
+			next = current.parent();
+		}
+
+		return next;
 	}
 
 	// TODO
@@ -225,23 +311,25 @@ public class Tree {
 		Node toDelete = getNode(id);
 
 		if (toDelete != null) {
-			// Node is RED or root, no rebalancing needed
+			// Node is RED or root, no re-balancing needed
 			if (toDelete.getColor() == RED || toDelete.parent() == null) {
 				normalDelete(toDelete);
 			}
 			// Node is BLACK and not root (has parent), need to check which
-			// rebalance
+			// Re-balance with respect to deficient subtree y
+			// Provide py in case y is null
 			else {
-				Node py = toDelete.parent();
-				Node y = py.left();
-
-				if (toDelete == py.right()) {
-					y = py.right();
+				Node y = null;
+				Pair pyY = normalDelete(toDelete);
+				
+				if(pyY.isRightChild){
+					y = pyY.node.right();
+				}
+				else{
+					y = pyY.node.left();
 				}
 
-				normalDelete(toDelete);
-
-				fixRbDelete(y, py);
+				fixRbDelete(y, pyY.node, pyY.isRightChild);
 
 			}
 			return true;
@@ -251,26 +339,30 @@ public class Tree {
 	}
 
 	// TODO
-	private void fixRbDelete(Node y, Node py) {
+	private void fixRbDelete(Node y, Node py, boolean isRight) {
 
-		// y is deficient subtree y could be null
-
+		// y is deficient subtree, could be null
+		// py is parent of y
+		
 		// Moved deficiency to the root, done
 		if (py == null) {
-			System.out.println("Flip root");
+			System.out.println("Set root black");
 			y.setColor(BLACK);
 			return;
 		}
-
-		System.out.println("Y = " + y.getValue());
+		
+		if(y!= null){
+			System.out.println("Y = " + y.getValue());
+		}
+		else{
+			System.out.println("Y = null");
+		}
 		System.out.println("py = " + py.getValue());
 
-		boolean isRight = false;
 		Node v = null;
 
-		if (y == py.right()) {
+		if (isRight) {
 			System.out.println("y is right");
-			isRight = true;
 			v = py.left();
 		} else {
 			System.out.println("y is left");
@@ -278,22 +370,29 @@ public class Tree {
 		}
 
 		/*
-		 * Xcn -> X: y is R or L child of parent c: y's sibling, v's color n:
-		 * number of v's RED children
+		 * Xcn -> 
+		 * 	X: y is R or L child of parent 
+		 * 	c: y's sibling, v's color 
+		 * 	n:number of v's RED children
 		 */
 
 		// Rb0 and Lb0
-		if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 0))) {
-
+		if (v == null || (v.getColor() == BLACK && v.redDegree() == 0)) {
+			System.out.println("Lb0/Rb0");
+			
 			// case 1: py is BLACK
 			if (py.getColor() == BLACK) {
-				System.out.println("Rb0 case 1");
+				System.out.println("case 1");
 				v.flipColor();
-				fixRbDelete(py, py.parent());
+				
+				if(py.parent() != null){
+					isRight = (py == py.parent().right());
+				}
+				fixRbDelete(py, py.parent(), isRight);
 			}
 			// case 2: py is RED
 			else {
-				System.out.println("Rb0 case 2");
+				System.out.println("case 2");
 				v.flipColor();
 				py.flipColor();
 				return;
@@ -302,14 +401,17 @@ public class Tree {
 
 		// Rb1
 		else if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 1))) {
+			System.out.println("Rb1");
 
 			// case 1: v's left child is RED
 			if (v != null && v.getColor() == RED) {
+				System.out.println("case 1");
 				leftRotate(py);
 				return;
 			}
 			// case 2: v's right child is RED
 			else if (py.right() != null && py.right().getColor() == RED) {
+				System.out.println("case 2");
 				leftRightRotate(py);
 				return;
 			}
@@ -317,7 +419,8 @@ public class Tree {
 
 		// Rb2
 		else if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 2))) {
-
+			System.out.println("Rb2");
+			
 			leftRightRotate(py);
 			return;
 		}
@@ -329,22 +432,25 @@ public class Tree {
 
 		// Rr(0)
 		else if (isRight && (v != null && v.getColor() == RED) && (v.right() == null || v.right().redDegree() == 0)) {
+			System.out.println("Rr0");
 			leftRotate(py);
 			return;
 		}
 
 		// Rr(1)
 		else if (isRight && (v != null && v.getColor() == RED) && v.right().redDegree() == 1) {
+			System.out.println("Rr1");
 
 			// case 1: w's red child is left child
 			if (v.right().left() != null && v.right().left().getColor() == RED) {
+				System.out.println("case 1");
 				leftRightRotate(py);
 				return;
 			}
 			// case 2: w's red child is right child
 			// TODO CHECK THIS CASE
 			else if (v.right().right() != null && v.right().right().getColor() == RED) {
-
+				System.out.println("case 2");
 				return;
 			}
 		}
@@ -352,7 +458,7 @@ public class Tree {
 		// TODO
 		// Rr(2) -> (same as Rr(1) case 2
 		else if (isRight && (v != null && v.getColor() == RED) && v.right().redDegree() == 2) {
-
+			System.out.println("Rr2");
 			return;
 		}
 
@@ -360,34 +466,61 @@ public class Tree {
 
 	/**
 	 * Follows normal BST rules for deleting a node
+	 * Returns the parent of the subtree from which the node was deleted
+	 * and whether it was a right child.
 	 * 
 	 * @param n
+	 * @return
 	 */
-	private void normalDelete(Node n) {
+	private Pair normalDelete(Node n) {
+		System.out.println("Delete " + n.getKey());
+		
 		int deg = n.degree();
 
 		if (deg == 0) {
 			if (n.parent() != null) {
 				if (n.parent().left() == n) {
 					n.parent().setLeft(null);
+					return new Pair(n.parent(), false);
 				} else {
 					n.parent().setRight(null);
+					return new Pair(n.parent(), true);
 				}
 			}
 			// Node is root
 			else {
 				root = null;
+				return new Pair(null, null);
 			}
-		} else if (deg == 1) {
+		} 
+		else if (deg == 1) {
 			if (n.parent() != null) {
 				if (n.left() != null) {
 					n.left().setParent(n.parent());
-					n.parent().setLeft(n.left());
+					
+					if(n.parent().left() == n){
+						n.parent().setLeft(n.left());
+						return new Pair(n.parent(), false);
+					}
+					else{
+						n.parent().setRight(n.left());
+						return new Pair(n.parent(), true);
+					}
 				} else {
 					n.right().setParent(n.parent());
-					n.parent().setRight(n.right());
+					
+					if(n.parent().left() == n){
+						n.parent().setLeft(n.right());
+						return new Pair(n.parent(), false);
+					}
+					else{
+						n.parent().setRight(n.right());
+						return new Pair(n.parent(), true);
+					}
 				}
-			} else {
+			} 
+			// Node is root
+			else {
 				if (n.left() != null) {
 					n.left().setParent(n.parent());
 					root = n.left();
@@ -396,6 +529,7 @@ public class Tree {
 					root = n.right();
 				}
 				root.setColor(BLACK);
+				return new Pair(null, null);
 			}
 		} else if (deg == 2) {
 			Node min = getMinNode(n.right());
@@ -411,14 +545,18 @@ public class Tree {
 			if (n.parent() != null) {
 				if (n.parent().left() == n) {
 					n.parent().setLeft(min);
+					return new Pair(n.parent(), false);
 				} else {
 					n.parent().setRight(min);
+					return new Pair(n.parent(), true);
 				}
 			} else {
 				root = min;
 				root.setColor(BLACK);
+				return new Pair(null, null);
 			}
 		}
+		return new Pair(null, null);
 	}
 
 	/**
@@ -439,6 +577,12 @@ public class Tree {
 		return parent;
 	}
 	
+	/**
+	 * Return node with max key in subtree rooted at input node
+	 * 
+	 * @param root
+	 * @return
+	 */
 	private Node getMaxNode(Node root){
 		Node current = root;
 		Node parent = null;
@@ -456,7 +600,6 @@ public class Tree {
 
 		if (result != null) {
 			return result.increaseValue(m);
-			
 		} else {
 			insert(theID, m);
 			return m;
@@ -527,21 +670,21 @@ public class Tree {
 		// y's new parent was x's parent
 		y.setParent(z.parent());
 
-		/* Set the parent to point to y instead of x */
-		/* First see whether we're at the root */
+		// Set the parent to point to y instead of x
+		// First see whether at root
 		if (z.parent() == null) {
 			root = y;
 		} else {
 			if (z == z.parent().left()) {
-				/* x was on the left of its parent */
+				// x was on the left of its parent
 				z.parent().setLeft(y);
 			} else {
-				/* x must have been on the right */
+				// else on the right
 				z.parent().setRight(y);
 			}
 		}
 
-		/* Finally, put x on y's left */
+		// x on y's left
 		y.setLeft(z);
 		z.setParent(y);
 
