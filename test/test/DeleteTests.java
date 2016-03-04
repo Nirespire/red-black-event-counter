@@ -1,3 +1,4 @@
+package test;
 import org.junit.Assert;
 import org.junit.Test;
 import redBlackBST.Node;
@@ -193,6 +194,25 @@ public class DeleteTests {
 
 		checkValid(t.root);
 	}
+	
+	// Lb1
+	// case 1: v's left child is RED
+	@Test
+	public void testDelete_Lb1_case1(){
+		Tree t = new Tree();
+		
+		t.insert(6);
+		t.insert(4);
+		t.insert(2);
+		t.insert(5);
+		t.insert(1);
+		
+		t.delete(2);
+		
+		Assert.assertNull(t.getNode(2));
+		
+		checkValid(t.root);
+	}
 
 	// Rb1
 	// case 2: v's right child is RED
@@ -210,6 +230,26 @@ public class DeleteTests {
 
 		Assert.assertNull(t.getNode(4));
 
+		checkValid(t.root);
+	}
+	
+	// Lb1
+	// case 2: v's right child is RED
+	@Test
+	public void testDelete_Lb1_case2(){
+		Tree t = new Tree();
+		
+		t.insert(4);
+		t.insert(3);
+		t.insert(2);
+		t.insert(5);
+		t.insert(1);
+
+		t.delete(2);
+
+		Assert.assertNull(t.getNode(2));
+		
+		
 		checkValid(t.root);
 	}
 
@@ -230,6 +270,26 @@ public class DeleteTests {
 
 		checkValid(t.root);
 	}
+	
+	// Lb2
+	@Test
+	public void testDelete_Lb2() {
+		Tree t = new Tree();
+		
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(45);
+		t.insert(55);
+
+		t.delete(25);
+
+		Assert.assertNull(t.getNode(25));
+
+		checkValid(t.root);
+	}
 
 	// Rr(0)
 	@Test
@@ -246,6 +306,25 @@ public class DeleteTests {
 		t.delete(50);
 
 		Assert.assertNull(t.getNode(50));
+
+		checkValid(t.root);
+	}
+	
+	// Lr(0)
+	@Test
+	public void testDelete_Lr0() {
+		Tree t = new Tree();
+		
+		t.insert(50);
+		t.insert(55);
+		t.insert(40);
+		t.insert(53);
+		t.insert(60);
+		t.insert(61);
+
+		t.delete(40);
+
+		Assert.assertNull(t.getNode(40));
 
 		checkValid(t.root);
 	}
@@ -270,6 +349,27 @@ public class DeleteTests {
 
 		checkValid(t.root);
 	}
+	
+	// Lr(1)
+	// case 1: RED node is v's right child
+	@Test
+	public void testDelete_Lr1_case1() {
+		Tree t = new Tree();
+		
+		t.insert(50);
+		t.insert(55);
+		t.insert(40);
+		t.insert(53);
+		t.insert(60);
+		t.insert(61);
+		t.insert(54);
+
+		t.delete(40);
+
+		Assert.assertNull(t.getNode(40));
+
+		checkValid(t.root);
+	}
 
 	// Rr(1)
 	// case 2: RED node is v's right child
@@ -291,6 +391,27 @@ public class DeleteTests {
 
 		checkValid(t.root);
 	}
+	
+	// Lr(1)
+	// case 2: RED node is v's left child
+	@Test
+	public void testDelete_Lr1_case2() {
+		Tree t = new Tree();
+		
+		t.insert(50);
+		t.insert(55);
+		t.insert(40);
+		t.insert(53);
+		t.insert(60);
+		t.insert(61);
+		t.insert(52);
+
+		t.delete(40);
+
+		Assert.assertNull(t.getNode(40));
+
+		checkValid(t.root);
+	}
 
 	// Rr(2)
 	@Test
@@ -309,6 +430,27 @@ public class DeleteTests {
 		t.delete(50);
 
 		Assert.assertNull(t.getNode(50));
+
+		checkValid(t.root);
+	}
+	
+	// Lr(2)
+	@Test
+	public void testDelete_Lr2() {
+		Tree t = new Tree();
+		
+		t.insert(50);
+		t.insert(55);
+		t.insert(40);
+		t.insert(53);
+		t.insert(60);
+		t.insert(61);
+		t.insert(52);
+		t.insert(54);
+
+		t.delete(40);
+
+		Assert.assertNull(t.getNode(40));
 
 		checkValid(t.root);
 	}

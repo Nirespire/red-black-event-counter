@@ -60,3 +60,5 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+*.exclude*

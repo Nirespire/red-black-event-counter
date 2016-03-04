@@ -1,17 +1,20 @@
 package util;
 
-import static util.Color.*;
+import static util.Color.BLACK;
+import static util.Color.RED;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import redBlackBST.Node;
 import redBlackBST.Tree;
 
 public class Util {
-	public static Node[] readInputFile(String filename) {
-		Node[] output = null;
+	public static Tree readInputFile(String filename) {
+		Tree output = new Tree();
 
 		BufferedReader br = null;
 
@@ -22,12 +25,10 @@ public class Util {
 			br = new BufferedReader(new FileReader(filename));
 
 			int count = Integer.parseInt(br.readLine());
-			output = new Node[count];
 
 			for (int i = 0; i < count; i++) {
 				line = br.readLine().split(" ");
-				Node newNode = new Node(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
-				output[i] = newNode;
+				output.insert(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
 			}
 
 		} catch (IOException e) {
@@ -99,31 +100,31 @@ public class Util {
 
 		return leftValid && rightValid;
 	}
-	
-	public static boolean checkValidRbBST(Node root){
-		
+
+	public static boolean checkValidRbBST(Node root) {
+
 		boolean one = verifyProperty1(root);
 		boolean two = verifyProperty2(root);
 		boolean four = verifyProperty4(root);
-		try{
+		try {
 			verifyProperty5(root);
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
-		};
-		
-		if(!one){
+		}
+		;
+
+		if (!one) {
 			System.out.println("All Nodes not RED or BLACK");
 		}
-		if(!two){
+		if (!two) {
 			System.out.println("Root not BLACK");
 		}
-		if(!four){
+		if (!four) {
 			System.out.println("RED Nodes adjacent to each other");
 		}
-		
-		return one && two && four ;
+
+		return one && two && four;
 	}
 
 	// Property 1
@@ -148,38 +149,64 @@ public class Util {
 			return true;
 		else {
 			return (n.left() == null || n.left().getColor() == BLACK)
-			&& (n.right() == null || n.right().getColor() == BLACK)
-			&& (n.parent() == null || n.parent().getColor() == BLACK)
-			&& verifyProperty4(n.left())
-			&& verifyProperty4(n.right());
+					&& (n.right() == null || n.right().getColor() == BLACK)
+					&& (n.parent() == null || n.parent().getColor() == BLACK) && verifyProperty4(n.left())
+					&& verifyProperty4(n.right());
 		}
 	}
-	
+
 	// Property 5
 	// All paths to external nodes should pass the same number of BLACK nodes
 	public static void verifyProperty5(Node root) throws Exception {
-	    verifyProperty5Helper(root, 0, -1);
+		verifyProperty5Helper(root, 0, -1);
 	}
 
 	private static int verifyProperty5Helper(Node n, int blackCount, int pathBlackCount) throws Exception {
 		if (n == null) {
-	        if (pathBlackCount == -1) {
-	            pathBlackCount = blackCount;
-	        } else {
-	            if(blackCount != pathBlackCount){
-	            	throw new Exception("BLACK height error");
-	            }
-	        }
-	        return pathBlackCount;
-	    }
-		
+			if (pathBlackCount == -1) {
+				pathBlackCount = blackCount;
+			} else {
+				if (blackCount != pathBlackCount) {
+					throw new Exception("BLACK height error");
+				}
+			}
+			return pathBlackCount;
+		}
+
 		if (n.getColor() == Color.BLACK) {
-	        blackCount++;
-	    }
-	    
-	    pathBlackCount = verifyProperty5Helper(n.left(), blackCount, pathBlackCount);
-	    pathBlackCount = verifyProperty5Helper(n.right(), blackCount, pathBlackCount);
-	    return pathBlackCount;
+			blackCount++;
+		}
+
+		pathBlackCount = verifyProperty5Helper(n.left(), blackCount, pathBlackCount);
+		pathBlackCount = verifyProperty5Helper(n.right(), blackCount, pathBlackCount);
+		return pathBlackCount;
+	}
+
+	public static void createHugeInputFile() {
+		try {
+
+			File file = new File("input.exclude.txt");
+			
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			PrintWriter bw = new PrintWriter(file.getAbsoluteFile());
+			
+			int numElements = 150000 * 1000;
+			bw.println(numElements);
+
+			for(int i = 1;i <= numElements; i++){
+				bw.println(i + " " + i);
+			}
+			
+			bw.close();
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

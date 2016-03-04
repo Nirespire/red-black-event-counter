@@ -18,6 +18,9 @@ public class bbst {
 	public static Tree t;
 
 	public static void main(String[] args) {
+		
+		//Util.createHugeInputFile();
+		
 		String filename;
 		Scanner input = new Scanner(System.in);
 
@@ -28,14 +31,8 @@ public class bbst {
 			filename = input.next();
 		}
 
-		Node[] inputNodes = Util.readInputFile(filename);
-
-		t = new Tree();
-
-		for (Node n : inputNodes) {
-			t.insert(n.getKey(), n.getValue());
-		}
-
+		t = Util.readInputFile(filename);
+		
 		String userInput;
 
 		while (true) {
