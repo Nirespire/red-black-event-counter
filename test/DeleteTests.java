@@ -200,14 +200,15 @@ public class DeleteTests {
 	public void testDelete_Rb1_case2() {
 		Tree t = new Tree();
 
-		t.insert(3);
-		t.insert(2);
-		t.insert(1);
 		t.insert(4);
+		t.insert(3);
+		t.insert(1);
+		t.insert(5);
+		t.insert(2);
+		
+		t.delete(4);
 
-		t.delete(1);
-
-		Assert.assertNull(t.getNode(1));
+		Assert.assertNull(t.getNode(4));
 
 		checkValid(t.root);
 	}

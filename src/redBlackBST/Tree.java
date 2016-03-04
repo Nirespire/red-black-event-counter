@@ -3,6 +3,7 @@ package redBlackBST;
 import static util.Color.*;
 
 import util.Pair;
+import util.Util;
 
 public class Tree {
 	public Node root;
@@ -104,7 +105,7 @@ public class Tree {
 
 				System.out.println("LLb");
 
-				leftRotate(reference.grandparent());
+				leftRotate(reference.grandparent(), true);
 				return;
 			}
 			// RRb case
@@ -114,7 +115,7 @@ public class Tree {
 
 				System.out.println("RRb");
 
-				rightRotate(reference.grandparent());
+				rightRotate(reference.grandparent(), true);
 				return;
 			}
 			// LRb case
@@ -124,7 +125,7 @@ public class Tree {
 
 				System.out.println("LRb");
 
-				leftRightRotate(reference.grandparent());
+				leftRightRotate(reference.grandparent(), true);
 
 				return;
 			}
@@ -135,7 +136,7 @@ public class Tree {
 
 				System.out.println("RLb");
 
-				rightLeftRotate(reference.grandparent());
+				rightLeftRotate(reference.grandparent(), true);
 
 				return;
 			}
@@ -400,19 +401,29 @@ public class Tree {
 		}
 
 		// Rb1
-		else if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 1))) {
+		else if (isRight && (v != null && (v.getColor() == BLACK && v.redDegree() == 1))) {
 			System.out.println("Rb1");
 
 			// case 1: v's left child is RED
-			if (v != null && v.getColor() == RED) {
+			if (v.left() != null && v.left().getColor() == RED) {
 				System.out.println("case 1");
-				leftRotate(py);
+				
+				py.setColor(BLACK);
+				v.left().setColor(BLACK);
+				leftRotate(py, false);
+
 				return;
 			}
 			// case 2: v's right child is RED
-			else if (py.right() != null && py.right().getColor() == RED) {
+			else if (v.right() != null && v.right().getColor() == RED) {
 				System.out.println("case 2");
-				leftRightRotate(py);
+				
+				py.setColor(BLACK);
+				
+				leftRightRotate(py, false);
+				
+				root.setColor(BLACK);
+				
 				return;
 			}
 		}
@@ -421,7 +432,9 @@ public class Tree {
 		else if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 2))) {
 			System.out.println("Rb2");
 			
-			leftRightRotate(py);
+			leftRightRotate(py, false);
+			
+			root.setColor(BLACK);
 			return;
 		}
 
@@ -431,9 +444,13 @@ public class Tree {
 		 */
 
 		// Rr(0)
-		else if (isRight && (v != null && v.getColor() == RED) && (v.right() == null || v.right().redDegree() == 0)) {
+		else if (isRight && (v != null && v.getColor() == RED) && (v.right() != null && v.right().redDegree() == 0)) {
 			System.out.println("Rr0");
-			leftRotate(py);
+			
+			v.setColor(BLACK);
+			v.right().setColor(RED);
+			
+			leftRotate(py, false);
 			return;
 		}
 
@@ -444,13 +461,20 @@ public class Tree {
 			// case 1: w's red child is left child
 			if (v.right().left() != null && v.right().left().getColor() == RED) {
 				System.out.println("case 1");
-				leftRightRotate(py);
+				
+				v.right().left().setColor(BLACK);
+				
+				leftRightRotate(py, false);
 				return;
 			}
 			// case 2: w's red child is right child
 			// TODO CHECK THIS CASE
 			else if (v.right().right() != null && v.right().right().getColor() == RED) {
 				System.out.println("case 2");
+				
+				v.right().right().setColor(BLACK);
+				
+				leftRightRotate(py, false);
 				return;
 			}
 		}
@@ -459,6 +483,11 @@ public class Tree {
 		// Rr(2) -> (same as Rr(1) case 2
 		else if (isRight && (v != null && v.getColor() == RED) && v.right().redDegree() == 2) {
 			System.out.println("Rr2");
+			
+			v.right().right().setColor(BLACK);
+			
+			leftRightRotate(py, false);
+			
 			return;
 		}
 
@@ -624,7 +653,7 @@ public class Tree {
 		}
 	}
 
-	public Node leftRotate(Node z) {
+	public Node leftRotate(Node z, boolean flip) {
 		System.out.println("L");
 
 		Node y = z.left();
@@ -649,14 +678,16 @@ public class Tree {
 		y.setRight(z);
 		z.setParent(y);
 
-		y.flipColor();
-		z.flipColor();
+		if(flip){
+			y.flipColor();
+			z.flipColor();
+		}
 
 		return y;
 
 	}
 
-	public Node rightRotate(Node z) {
+	public Node rightRotate(Node z, boolean flip) {
 		System.out.println("R");
 
 		Node y = z.right();
@@ -688,8 +719,10 @@ public class Tree {
 		y.setLeft(z);
 		z.setParent(y);
 
-		y.flipColor();
-		z.flipColor();
+		if(flip){
+			y.flipColor();
+			z.flipColor();
+		}
 
 		return y;
 	}
@@ -718,7 +751,7 @@ public class Tree {
 		return isValid;
 	}
 
-	public void leftRightRotate(Node z) {
+	public void leftRightRotate(Node z, boolean flip) {
 		System.out.println("LR");
 		Node x = z.left();
 		Node y = x.right();
@@ -750,13 +783,15 @@ public class Tree {
 
 		y.setLeft(x);
 		x.setParent(y);
-
-		y.flipColor();
-		z.flipColor();
+		
+		if(flip){
+			y.flipColor();
+			z.flipColor();
+		}
 
 	}
 
-	public void rightLeftRotate(Node z) {
+	public void rightLeftRotate(Node z, boolean flip) {
 		System.out.println("RL");
 		Node x = z.right();
 		Node y = x.left();
@@ -788,9 +823,11 @@ public class Tree {
 
 		y.setRight(x);
 		x.setParent(y);
-
-		y.flipColor();
-		z.flipColor();
+		
+		if(flip){
+			y.flipColor();
+			z.flipColor();
+		}
 	}
 
 }
