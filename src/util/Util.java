@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import redBlackBST.Node;
 import redBlackBST.Tree;
@@ -41,6 +43,47 @@ public class Util {
 				ex.printStackTrace();
 			}
 		}
+
+		return output;
+	}
+
+	public static Tree readInputFile2(String filename) {
+
+		BufferedReader br = null;
+		KeyValuePair[] items = null;
+
+		try {
+
+			String line[];
+
+			br = new BufferedReader(new FileReader(filename));
+
+			int count = Integer.parseInt(br.readLine());
+
+			items = new KeyValuePair[count];
+
+			for (int i = 0; i < count; i++) {
+				line = br.readLine().split(" ");
+				items[i] = new KeyValuePair(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		Node root = Util.buildBBSTFromSortedArray(items, 0, items.length - 1);
+		Util.colorDeepestLeafs(root);
+
+		Tree output = new Tree(root);
+
+		System.out.println("Done Read");
 
 		return output;
 	}
@@ -186,20 +229,20 @@ public class Util {
 		try {
 
 			File file = new File("input.exclude.txt");
-			
+
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			
+
 			PrintWriter bw = new PrintWriter(file.getAbsoluteFile());
-			
+
 			int numElements = 150000 * 1000;
 			bw.println(numElements);
 
-			for(int i = 1;i <= numElements; i++){
+			for (int i = 1; i <= numElements; i++) {
 				bw.println(i + " " + i);
 			}
-			
+
 			bw.close();
 
 			System.out.println("Done");
@@ -207,6 +250,84 @@ public class Util {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static Node buildBBSTFromSortedArray(KeyValuePair[] items, int start, int end) {
+		if (start > end) {
+			return null;
+		}
+
+		int mid = (start + end) / 2;
+		Node root = new Node(items[mid].key, items[mid].value);
+
+		Node left = buildBBSTFromSortedArray(items, start, mid - 1);
+		Node right = buildBBSTFromSortedArray(items, mid + 1, end);
+
+		root.setLeft(left);
+		if (left != null) {
+			left.setParent(root);
+		}
+
+		root.setRight(right);
+		if (right != null) {
+			right.setParent(root);
+		}
+
+		return root;
+	}
+
+	public static void colorDeepestLeafs(Node root) {
+		List<Node> nodes = Util.findDeepestNodes(root);
+
+		for (Node i : nodes) {
+			i.setColor(RED);
+		}
+	}
+
+	public static List findDeepestNodes(Node root) {
+		Object[] levelNodes = new Object[2];
+		levelNodes[0] = 0;
+		levelNodes[1] = new ArrayList();
+		findDeepestNodes(root, 1, levelNodes);
+		return (List) levelNodes[1];
+	}
+
+	private static void findDeepestNodes(Node root, int level, Object[] levelNodes) {
+		if (root == null)
+			return;
+		if ((Integer) levelNodes[0] <= level) {
+			if ((Integer) levelNodes[0] < level) {
+				((List) levelNodes[1]).clear();
+			}
+			levelNodes[0] = level;
+			((List) levelNodes[1]).add(root);
+		}
+		findDeepestNodes(root.left(), level + 1, levelNodes);
+		findDeepestNodes(root.right(), level + 1, levelNodes);
+	}
+
+	public boolean validateNode(Node n) {
+		boolean isValid = true;
+
+		if (n.parent() != null) {
+			boolean isRight = (n.parent().right() == n ? true : false);
+
+			if (isRight) {
+				isValid = isValid && n.parent().getKey() < n.getKey();
+			} else {
+				isValid = isValid && n.parent().getKey() > n.getKey();
+			}
+		}
+
+		if (n.right() != null) {
+			isValid = isValid && n.right().getKey() > n.getKey();
+		}
+
+		if (n.left() != null) {
+			isValid = isValid && n.left().getKey() < n.getKey();
+		}
+
+		return isValid;
 	}
 
 }

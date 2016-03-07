@@ -1,15 +1,19 @@
 package redBlackBST;
 
-import static util.Color.*;
+import static util.Color.BLACK;
+import static util.Color.RED;
 
 import util.Pair;
-import util.Util;
 
 public class Tree {
 	public Node root;
 
 	public Tree() {
 		this.root = null;
+	}
+	
+	public Tree(Node root){
+		this.root = root;
 	}
 
 	/**
@@ -865,30 +869,6 @@ public class Tree {
 		}
 
 		return y;
-	}
-	
-	private boolean validateNode(Node n) {
-		boolean isValid = true;
-
-		if (n.parent() != null) {
-			boolean isRight = (n.parent().right() == n ? true : false);
-
-			if (isRight) {
-				isValid = isValid && n.parent().getKey() < n.getKey();
-			} else {
-				isValid = isValid && n.parent().getKey() > n.getKey();
-			}
-		}
-
-		if (n.right() != null) {
-			isValid = isValid && n.right().getKey() > n.getKey();
-		}
-
-		if (n.left() != null) {
-			isValid = isValid && n.left().getKey() < n.getKey();
-		}
-
-		return isValid;
 	}
 
 	/**

@@ -31,7 +31,7 @@ public class bbst {
 			filename = input.next();
 		}
 
-		t = Util.readInputFile(filename);
+		t = Util.readInputFile2(filename);
 		
 		String userInput;
 
