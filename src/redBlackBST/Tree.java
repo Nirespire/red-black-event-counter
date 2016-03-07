@@ -514,13 +514,11 @@ public class Tree {
 				return;
 			}
 			// case 2: w's red child is right child
-			// TODO CHECK THIS CASE
 			else if (v.right().right() != null && v.right().right().getColor() == RED) {
 				System.out.println("case 2");
 				
-				v.right().right().setColor(BLACK);
+				customRotateRight(py, v);
 				
-				leftRightRotate(py, false);
 				return;
 			}
 		}
@@ -543,21 +541,17 @@ public class Tree {
 			else if (v.left().left() != null && v.left().left().getColor() == RED) {
 				System.out.println("case 2");
 				
-				v.left().left().setColor(BLACK);
-				
-				rightLeftRotate(py, false);
+				customRotateLeft(py, v);
+
 				return;
 			}
 		}
 
-		// TODO
 		// Rr(2) -> (same as Rr(1) case 2
 		else if (isRight && (v != null && v.getColor() == RED) && v.right().redDegree() == 2) {
 			System.out.println("Rr2");
 			
-			v.right().right().setColor(BLACK);
-			
-			leftRightRotate(py, false);
+			customRotateRight(py, v);
 			
 			return;
 		}
@@ -567,9 +561,7 @@ public class Tree {
 		else if (!isRight && (v != null && v.getColor() == RED) && v.left().redDegree() == 2) {
 			System.out.println("Lr2");
 			
-			v.left().left().setColor(BLACK);
-			
-			rightLeftRotate(py, false);
+			customRotateLeft(py, v);
 			
 			return;
 		}
@@ -910,6 +902,78 @@ public class Tree {
 			y.flipColor();
 			z.flipColor();
 		}
+	}
+	
+	public void customRotateRight(Node py, Node v){
+		Node x = v.right().right();
+		x.setColor(BLACK);
+		
+		v.right().setRight(x.left());
+		if(v.right().right() != null){
+			v.right().right().setParent(v.right());
+		}
+		
+		py.setLeft(x.right());
+		if(py.left() != null){
+			py.left().setParent(py);
+		}
+		
+		x.setLeft(v);
+		v.setParent(x);
+		
+		x.setParent(py.parent());
+		
+		if(py.parent() != null){
+			if(py.parent().right() == py){
+				py.parent().setRight(x);
+			}
+			else{
+				py.parent().setLeft(x);
+			}
+			
+		}
+		else{
+			root = x;
+		}
+		
+		x.setRight(py);
+		py.setParent(x);
+	}
+	
+	public void customRotateLeft(Node py, Node v){
+		Node x = v.left().left();
+		x.setColor(BLACK);
+		
+		v.left().setLeft(x.right());
+		if(v.left().left() != null){
+			v.left().left().setParent(v.left());
+		}
+		
+		py.setRight(x.left());
+		if(py.right() != null){
+			py.right().setParent(py);
+		}
+		
+		x.setRight(v);
+		v.setParent(x);
+		
+		x.setParent(py.parent());
+		
+		if(py.parent() != null){
+			if(py.parent().right() == py){
+				py.parent().setRight(x);
+			}
+			else{
+				py.parent().setLeft(x);
+			}
+			
+		}
+		else{
+			root = x;
+		}
+		
+		x.setLeft(py);
+		py.setParent(x);
 	}
 
 }

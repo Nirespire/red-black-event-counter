@@ -388,6 +388,13 @@ public class DeleteTests {
 		t.delete(50);
 
 		Assert.assertNull(t.getNode(50));
+		
+		Assert.assertNotNull(t.getNode(30));
+		Assert.assertNotNull(t.getNode(25));
+		Assert.assertNotNull(t.getNode(10));
+		Assert.assertNotNull(t.getNode(27));
+		Assert.assertNotNull(t.getNode(5));
+		Assert.assertNotNull(t.getNode(28));
 
 		checkValid(t.root);
 	}
@@ -409,6 +416,13 @@ public class DeleteTests {
 		t.delete(40);
 
 		Assert.assertNull(t.getNode(40));
+		
+		Assert.assertNotNull(t.getNode(50));
+		Assert.assertNotNull(t.getNode(55));
+		Assert.assertNotNull(t.getNode(53));
+		Assert.assertNotNull(t.getNode(60));
+		Assert.assertNotNull(t.getNode(61));
+		Assert.assertNotNull(t.getNode(52));
 
 		checkValid(t.root);
 	}

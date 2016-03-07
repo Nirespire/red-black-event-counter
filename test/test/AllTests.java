@@ -9,7 +9,7 @@ import test.GetTests;
 import test.InsertTests;
 
 @RunWith(Suite.class)
-@SuiteClasses({InsertTests.class, GetTests.class,  DeleteTests.class})
+@SuiteClasses({InsertTests.class, GetTests.class,  DeleteTests.class, AdvGetTests.class})
 public class AllTests {
 	
 }
