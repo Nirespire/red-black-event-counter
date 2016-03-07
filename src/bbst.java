@@ -49,7 +49,7 @@ public class bbst {
 
 	public static void parseAndExcute(String input) {
 
-		if (input == null) {
+		if (input == null || input.isEmpty()) {
 			return;
 		}
 
@@ -128,8 +128,8 @@ public class bbst {
 	 * @param id1
 	 * @param id2
 	 */
-	public static void inRange(int id1, int id2) {
-
+	public static void inRange(int id1, int id2) {	
+		System.out.println(t.inRange(id1, id2));
 	}
 
 	/**

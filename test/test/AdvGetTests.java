@@ -99,4 +99,108 @@ public class AdvGetTests {
 		
 		checkValid(t.root);
 	}
+	
+	@Test
+	public void testInRangeBothEndsExist(){
+		Tree t = new Tree();
+
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(5);
+		t.insert(28);
+		
+		int total = t.inRange(10, 30);
+		
+		Assert.assertEquals(120, total);
+		
+	}
+	
+	@Test
+	public void testInRangeNoLeftEnd(){
+		Tree t = new Tree();
+
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(5);
+		t.insert(28);
+		
+		int total = t.inRange(11, 30);
+		
+		Assert.assertEquals(110, total);
+		
+	}
+	
+	@Test
+	public void testInRangeNoRightEnd(){
+		Tree t = new Tree();
+
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(5);
+		t.insert(28);
+		
+		int total = t.inRange(10, 35);
+		
+		Assert.assertEquals(120, total);
+	}
+	
+	@Test
+	public void testInRangeEndsDontExist(){
+		Tree t = new Tree();
+
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(5);
+		t.insert(28);
+		
+		int total = t.inRange(7, 35);
+		
+		Assert.assertEquals(120, total);
+	}
+	
+	@Test
+	public void testInRangeEndsEqualExist(){
+		Tree t = new Tree();
+
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(5);
+		t.insert(28);
+		
+		int total = t.inRange(27, 27);
+		
+		Assert.assertEquals(27, total);
+	}
+	
+	@Test
+	public void testInRangeEndsEqualDontExist(){
+		Tree t = new Tree();
+
+		t.insert(50);
+		t.insert(30);
+		t.insert(25);
+		t.insert(10);
+		t.insert(27);
+		t.insert(5);
+		t.insert(28);
+		
+		int total = t.inRange(29, 29);
+		
+		Assert.assertEquals(0, total);
+	}
 }

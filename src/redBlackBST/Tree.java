@@ -12,10 +12,21 @@ public class Tree {
 		this.root = null;
 	}
 
+	/**
+	 * Constructs a new node with key = value = val and inserts it into the Tree
+	 * 
+	 * @param val will be used as both key and value for the new Node
+	 */
 	public void insert(int val) {
 		insert(val, val);
 	}
 
+	/**
+	 * Constructs a new node with given key and value and inserts it into the Tree
+	 * 
+	 * @param id key
+	 * @param value value
+	 */
 	public void insert(int id, int value) {
 		System.out.println("Insert " + id);
 		Node current = root;
@@ -51,9 +62,9 @@ public class Tree {
 	}
 
 	/**
-	 * Checks and fixes integrity of Red-Black properties
+	 * Checks and fixes integrity of Red-Black properties after insertion
 	 * 
-	 * @param reference
+	 * @param reference newly inserted Node
 	 */
 	private void fixRBInsert(Node reference) {
 		// System.out.println(reference);
@@ -144,6 +155,13 @@ public class Tree {
 		}
 	}
 
+	/**
+	 * Retrieves the Node with key == id. Returns null if Node with
+	 * the key does not exist in the Tree.
+	 * 
+	 * @param id key
+	 * @return Node with key == id or null
+	 */
 	public Node getNode(int id) {
 
 		Node current = root;
@@ -161,18 +179,25 @@ public class Tree {
 		return null;
 	}
 
+	/**
+	 * Returns the value of the Node with specified key.
+	 * Returns 0 if the Node does not exist in the Tree.
+	 * 
+	 * @param id key
+	 * @return value of the Node with key == id or 0
+	 */
 	public int getValue(int id) {
 		Node n = getNode(id);
 		return (n == null ? 0 : n.getValue());
 	}
 
 	/**
-	 * Returns the node with min ID greater than input.
-	 * Returns "0 0" if no next exists.
-	 * Input ID does not need to exist in the tree.
+	 * Returns the Node with min ID greater than input.
+	 * Returns null if no next exists.
+	 * Provided id does not need to exist in the tree.
 	 * 
-	 * @param id
-	 * @return
+	 * @param id key for which a Node with next higher key will be found. Does not need to exist in the Tree.
+	 * @return Node with min ID greater than input
 	 */
 	public Node getNextNode(int id) {
 		
@@ -237,12 +262,12 @@ public class Tree {
 	}
 	
 	/**
-	 * Returns the node with max ID less than input.
-	 * Returns "0 0" if no previous exists.
-	 * Input ID does not need to exist in the tree.
+	 * Returns the Node with max ID lesser than input.
+	 * Returns null if no next exists.
+	 * Provided id does not need to exist in the tree.
 	 * 
-	 * @param id
-	 * @return
+	 * @param id key for which a Node with next lower key will be found. Does not need to exist in the Tree.
+	 * @return Node with max ID lesser than input
 	 */
 	public Node getPreviousNode(int id){
 		
@@ -306,7 +331,13 @@ public class Tree {
 		return next;
 	}
 
-	// TODO
+	/**
+	 * Deletes Node with key == id and rebalances.
+	 * Does nothing if key does not exist in Tree.
+	 * 
+	 * @param id key of Node to be deleted
+	 * @return delete success
+	 */
 	public boolean delete(int id) {
 
 		Node toDelete = getNode(id);
@@ -339,7 +370,13 @@ public class Tree {
 		}
 	}
 
-	// TODO
+	/**
+	 * Checks and fixes integrity of Red-Black properties after deletion.
+	 * 
+	 * @param y root of deficient subtree
+	 * @param py parent of y, in case y is null
+	 * @param isRight if y was the right child of py
+	 */
 	private void fixRbDelete(Node y, Node py, boolean isRight) {
 
 		// y is deficient subtree, could be null
@@ -537,7 +574,6 @@ public class Tree {
 				return;
 			}
 			// case 2: w's red child is left child
-			// TODO CHECK THIS CASE
 			else if (v.left().left() != null && v.left().left().getColor() == RED) {
 				System.out.println("case 2");
 				
@@ -556,7 +592,6 @@ public class Tree {
 			return;
 		}
 		
-		// TODO
 		// Lr(2) -> (same as Lr(1) case 2
 		else if (!isRight && (v != null && v.getColor() == RED) && v.left().redDegree() == 2) {
 			System.out.println("Lr2");
@@ -572,8 +607,8 @@ public class Tree {
 	 * Returns the parent of the subtree from which the node was deleted
 	 * and whether it was a right child.
 	 * 
-	 * @param n
-	 * @return
+	 * @param n Node to be deleted
+	 * @return Root of deficient subtree
 	 */
 	private Pair normalDelete(Node n) {
 		System.out.println("Delete " + n.getKey());
@@ -665,8 +700,8 @@ public class Tree {
 	/**
 	 * Return node with min key in subtree rooted at input node
 	 * 
-	 * @param root
-	 * @return
+	 * @param root root Node of subtree to be searched
+	 * @return Node with the min key
 	 */
 	private Node getMinNode(Node root) {
 		Node current = root;
@@ -683,8 +718,8 @@ public class Tree {
 	/**
 	 * Return node with max key in subtree rooted at input node
 	 * 
-	 * @param root
-	 * @return
+	 * @param root root Node of subtree to be searched
+	 * @return Node with the max key
 	 */
 	private Node getMaxNode(Node root){
 		Node current = root;
@@ -698,6 +733,14 @@ public class Tree {
 		return parent;
 	}
 
+	/**
+	 * Increases the value at the node with provided key. If the node does
+	 * not exist, it will be inserted with value m.
+	 * 
+	 * @param theID key of the node to increase
+	 * @param m amount by which that node's value should be increased
+	 * @return resulting node value
+	 */
 	public int increase(int theID, int m) {
 		Node result = getNode(theID);
 
@@ -709,6 +752,15 @@ public class Tree {
 		}
 	}
 
+	/**
+	 * Decreases the value at the node with provided key. If the value
+	 * goes below 0, the node will be deleted. Returns 0 if the node does
+	 * not exist or is deleted.
+	 * 
+	 * @param theID key of the node to decrease
+	 * @param m amount by which that node's value should be decreased
+	 * @return resulting node value. Will return 0 if deleted
+	 */
 	public int decrease(int theID, int m) {
 		Node result = getNode(theID);
 
@@ -727,6 +779,13 @@ public class Tree {
 		}
 	}
 
+	/**
+	 * Basic LL rotation about z.
+	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * 
+	 * @param z central Node of rotation
+	 * @param flip whether to flip colors as with inserts
+	 */
 	public Node leftRotate(Node z, boolean flip) {
 		System.out.println("L");
 
@@ -761,6 +820,13 @@ public class Tree {
 
 	}
 
+	/**
+	 * Basic RR rotation about z.
+	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * 
+	 * @param z central Node of rotation
+	 * @param flip whether to flip colors as with inserts
+	 */
 	public Node rightRotate(Node z, boolean flip) {
 		System.out.println("R");
 
@@ -800,7 +866,7 @@ public class Tree {
 
 		return y;
 	}
-
+	
 	private boolean validateNode(Node n) {
 		boolean isValid = true;
 
@@ -825,6 +891,13 @@ public class Tree {
 		return isValid;
 	}
 
+	/**
+	 * Basic LR rotation about z.
+	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * 
+	 * @param z central Node of rotation
+	 * @param flip whether to flip colors as with inserts
+	 */
 	public void leftRightRotate(Node z, boolean flip) {
 		System.out.println("LR");
 		Node x = z.left();
@@ -865,6 +938,13 @@ public class Tree {
 
 	}
 
+	/**
+	 * Basic RL rotation about z.
+	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * 
+	 * @param z central Node of rotation
+	 * @param flip whether to flip colors as with inserts
+	 */
 	public void rightLeftRotate(Node z, boolean flip) {
 		System.out.println("RL");
 		Node x = z.right();
@@ -904,6 +984,12 @@ public class Tree {
 		}
 	}
 	
+	/**
+	 * Used for custom rotations necessary for Rr(1) case 2 and RR(2) delete re-balances
+	 * 
+	 * @param py parent of deficient subtree y
+	 * @param v sibling of y
+	 */
 	public void customRotateRight(Node py, Node v){
 		Node x = v.right().right();
 		x.setColor(BLACK);
@@ -940,6 +1026,12 @@ public class Tree {
 		py.setParent(x);
 	}
 	
+	/**
+	 * Used for custom rotations necessary for Lr(1) case 2 and Lr(2) delete re-balances
+	 * 
+	 * @param py parent of deficient subtree y
+	 * @param v sibling of y
+	 */
 	public void customRotateLeft(Node py, Node v){
 		Node x = v.left().left();
 		x.setColor(BLACK);
@@ -974,6 +1066,41 @@ public class Tree {
 		
 		x.setLeft(py);
 		py.setParent(x);
+	}
+	
+	public int inRange(int id1, int id2){
+		if(id2 < id1){
+			return 0;
+		}
+		
+		return inRangeHelper(root, id1, id2);
+		
+	}
+	
+	private int inRangeHelper(Node root, int id1, int id2){
+		if(root == null){
+			return 0;
+		}
+		
+		int currentKey = root.getKey();
+		
+		int total = 0;
+		
+		if(id1 < currentKey){
+			total += inRangeHelper(root.left(), id1, id2);
+		}
+		
+		if(id1 <= currentKey && id2 >= currentKey){
+			total += root.getValue();
+		}
+		
+		if(id2 > currentKey){
+			total += inRangeHelper(root.right(), id1, id2);
+		}
+		
+		return total;
+		
+		
 	}
 
 }
