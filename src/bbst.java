@@ -26,12 +26,16 @@ public class bbst {
 
 		if (args.length > 0) {
 			filename = args[0];
+			System.out.println("Input filename: " + filename);
 		} else {
 			System.out.println("Input filename: ");
 			filename = input.next();
 		}
 
-		t = Util.readInputFile2(filename);
+		t = Util.readInputFile(filename);
+		
+		System.out.println("You may begin entering commands. Type \"exit\" to terminate program.");
+		System.out.println("________________________________________");
 		
 		String userInput;
 

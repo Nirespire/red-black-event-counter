@@ -32,7 +32,7 @@ public class Tree {
 	 * @param value value
 	 */
 	public void insert(int id, int value) {
-		System.out.println("Insert " + id);
+		//System.out.println("Insert " + id);
 		Node current = root;
 		Node parent = null;
 
@@ -89,7 +89,7 @@ public class Tree {
 			if (reference.grandparent() != null && reference.parent() == reference.grandparent().right()
 					&& (reference.grandparent().left() != null && reference.grandparent().left().getColor() == RED)) {
 
-				System.out.println("RRr/RLr");
+				//System.out.println("RRr/RLr");
 
 				reference.parent().setColor(BLACK);
 				reference.grandparent().setColor(RED);
@@ -103,7 +103,7 @@ public class Tree {
 			else if (reference.grandparent() != null && reference.parent() == reference.grandparent().left()
 					&& (reference.grandparent().right() != null && reference.grandparent().right().getColor() == RED)) {
 
-				System.out.println("LRr/LLr");
+				//System.out.println("LRr/LLr");
 
 				reference.parent().setColor(BLACK);
 				reference.grandparent().setColor(RED);
@@ -118,7 +118,7 @@ public class Tree {
 					&& reference == reference.parent().left() && (reference.grandparent().right() == null
 							|| reference.grandparent().right().getColor() == BLACK)) {
 
-				System.out.println("LLb");
+				//System.out.println("LLb");
 
 				leftRotate(reference.grandparent(), true);
 				return;
@@ -128,7 +128,7 @@ public class Tree {
 					&& reference == reference.parent().right()
 					&& (reference.grandparent().left() == null || reference.grandparent().left().getColor() == BLACK)) {
 
-				System.out.println("RRb");
+				//System.out.println("RRb");
 
 				rightRotate(reference.grandparent(), true);
 				return;
@@ -138,7 +138,7 @@ public class Tree {
 					&& reference == reference.parent().right() && (reference.grandparent().right() == null
 							|| reference.grandparent().right().getColor() == BLACK)) {
 
-				System.out.println("LRb");
+				//System.out.println("LRb");
 
 				leftRightRotate(reference.grandparent(), true);
 
@@ -149,7 +149,7 @@ public class Tree {
 					&& reference == reference.parent().left()
 					&& (reference.grandparent().left() == null || reference.grandparent().left().getColor() == BLACK)) {
 
-				System.out.println("RLb");
+				//System.out.println("RLb");
 
 				rightLeftRotate(reference.grandparent(), true);
 
@@ -388,26 +388,27 @@ public class Tree {
 		
 		// Moved deficiency to the root, done
 		if (py == null) {
-			System.out.println("Set root black");
+			//System.out.println("Set root black");
 			y.setColor(BLACK);
 			return;
 		}
 		
-		if (y != null) {
-			System.out.println("Y = " + y.getValue());
-		}
-		else{
-			System.out.println("Y = null");
-		}
-		System.out.println("py = " + py.getValue());
+		// DEBUG
+//		if (y != null) {
+//			System.out.println("Y = " + y.getValue());
+//		}
+//		else{
+//			System.out.println("Y = null");
+//		}
+//		System.out.println("py = " + py.getValue());
 
 		Node v = null;
 
 		if (isRight) {
-			System.out.println("y is right");
+			//System.out.println("y is right");
 			v = py.left();
 		} else {
-			System.out.println("y is left");
+			//System.out.println("y is left");
 			v = py.right();
 		}
 
@@ -420,11 +421,11 @@ public class Tree {
 
 		// Rb0 and Lb0
 		if (v == null || (v.getColor() == BLACK && v.redDegree() == 0)) {
-			System.out.println("Lb0/Rb0");
+			//System.out.println("Lb0/Rb0");
 			
 			// case 1: py is BLACK
 			if (py.getColor() == BLACK) {
-				System.out.println("case 1");
+				//System.out.println("case 1");
 				v.flipColor();
 				
 				if(py.parent() != null){
@@ -434,7 +435,7 @@ public class Tree {
 			}
 			// case 2: py is RED
 			else {
-				System.out.println("case 2");
+				//System.out.println("case 2");
 				v.flipColor();
 				py.flipColor();
 				return;
@@ -443,11 +444,11 @@ public class Tree {
 
 		// Rb1
 		else if (isRight && (v != null && (v.getColor() == BLACK && v.redDegree() == 1))) {
-			System.out.println("Rb1");
+			//System.out.println("Rb1");
 
 			// case 1: v's left child is RED
 			if (v.left() != null && v.left().getColor() == RED) {
-				System.out.println("case 1");
+				//System.out.println("case 1");
 				
 				py.setColor(BLACK);
 				v.left().setColor(BLACK);
@@ -457,7 +458,7 @@ public class Tree {
 			}
 			// case 2: v's right child is RED
 			else if (v.right() != null && v.right().getColor() == RED) {
-				System.out.println("case 2");
+				//System.out.println("case 2");
 				
 				py.setColor(BLACK);
 				leftRightRotate(py, false);
@@ -469,11 +470,11 @@ public class Tree {
 
 		// Lb1
 		else if (!isRight && (v != null && (v.getColor() == BLACK && v.redDegree() == 1))) {
-			System.out.println("Lb1");
+			//System.out.println("Lb1");
 
 			// case 1: v's left child is RED
 			if (v.left() != null && v.left().getColor() == RED) {
-				System.out.println("case 1");
+				//System.out.println("case 1");
 
 				py.setColor(BLACK);
 				rightLeftRotate(py, false);
@@ -483,7 +484,7 @@ public class Tree {
 			}
 			// case 2: v's right child is RED
 			else if (v.right() != null && v.right().getColor() == RED) {
-				System.out.println("case 2");
+				//System.out.println("case 2");
 
 				py.setColor(BLACK);
 				v.right().setColor(BLACK);
@@ -496,7 +497,7 @@ public class Tree {
 
 		// Rb2
 		else if (isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 2))) {
-			System.out.println("Rb2");
+			//System.out.println("Rb2");
 
 			leftRightRotate(py, false);
 			
@@ -506,7 +507,7 @@ public class Tree {
 		
 		// Lb2
 		else if (!isRight && (v == null || (v.getColor() == BLACK && v.redDegree() == 2))) {
-			System.out.println("Lb2");
+			//System.out.println("Lb2");
 	
 			rightLeftRotate(py, false);
 			
@@ -521,7 +522,7 @@ public class Tree {
 
 		// Rr(0)
 		else if (isRight && (v != null && v.getColor() == RED) && (v.right() != null && v.right().redDegree() == 0)) {
-			System.out.println("Rr0");
+			//System.out.println("Rr0");
 			
 			v.setColor(BLACK);
 			v.right().setColor(RED);
@@ -532,7 +533,7 @@ public class Tree {
 		
 		// Lr(0)
 		else if (!isRight && (v != null && v.getColor() == RED) && (v.left() != null && v.left().redDegree() == 0)) {
-			System.out.println("Lr0");
+			//System.out.println("Lr0");
 			
 			v.setColor(BLACK);
 			v.left().setColor(RED);
@@ -543,11 +544,11 @@ public class Tree {
 
 		// Rr(1)
 		else if (isRight && (v != null && v.getColor() == RED) && v.right().redDegree() == 1) {
-			System.out.println("Rr1");
+			//System.out.println("Rr1");
 
 			// case 1: w's red child is left child
 			if (v.right().left() != null && v.right().left().getColor() == RED) {
-				System.out.println("case 1");
+				//System.out.println("case 1");
 				
 				v.right().left().setColor(BLACK);
 				
@@ -556,7 +557,7 @@ public class Tree {
 			}
 			// case 2: w's red child is right child
 			else if (v.right().right() != null && v.right().right().getColor() == RED) {
-				System.out.println("case 2");
+				//System.out.println("case 2");
 				
 				customRotateRight(py, v);
 				
@@ -566,11 +567,11 @@ public class Tree {
 		
 		// Lr(1)
 		else if (!isRight && (v != null && v.getColor() == RED) && v.left().redDegree() == 1) {
-			System.out.println("Lr1");
+			//System.out.println("Lr1");
 
 			// case 1: w's red child is right child
 			if (v.left().right() != null && v.left().right().getColor() == RED) {
-				System.out.println("case 1");
+				//System.out.println("case 1");
 				
 				v.left().right().setColor(BLACK);
 				
@@ -579,7 +580,7 @@ public class Tree {
 			}
 			// case 2: w's red child is left child
 			else if (v.left().left() != null && v.left().left().getColor() == RED) {
-				System.out.println("case 2");
+				//System.out.println("case 2");
 				
 				customRotateLeft(py, v);
 
@@ -589,7 +590,7 @@ public class Tree {
 
 		// Rr(2) -> (same as Rr(1) case 2
 		else if (isRight && (v != null && v.getColor() == RED) && v.right().redDegree() == 2) {
-			System.out.println("Rr2");
+			//System.out.println("Rr2");
 			
 			customRotateRight(py, v);
 			
@@ -598,7 +599,7 @@ public class Tree {
 		
 		// Lr(2) -> (same as Lr(1) case 2
 		else if (!isRight && (v != null && v.getColor() == RED) && v.left().redDegree() == 2) {
-			System.out.println("Lr2");
+			//System.out.println("Lr2");
 			
 			customRotateLeft(py, v);
 			
@@ -615,7 +616,7 @@ public class Tree {
 	 * @return Root of deficient subtree
 	 */
 	private Pair normalDelete(Node n) {
-		System.out.println("Delete " + n.getKey());
+		//System.out.println("Delete " + n.getKey());
 		
 		int deg = n.degree();
 
@@ -791,7 +792,7 @@ public class Tree {
 	 * @param flip whether to flip colors as with inserts
 	 */
 	public Node leftRotate(Node z, boolean flip) {
-		System.out.println("L");
+		//System.out.println("L");
 
 		Node y = z.left();
 		z.setLeft(y.right());
@@ -832,7 +833,7 @@ public class Tree {
 	 * @param flip whether to flip colors as with inserts
 	 */
 	public Node rightRotate(Node z, boolean flip) {
-		System.out.println("R");
+		//System.out.println("R");
 
 		Node y = z.right();
 
@@ -879,7 +880,7 @@ public class Tree {
 	 * @param flip whether to flip colors as with inserts
 	 */
 	public void leftRightRotate(Node z, boolean flip) {
-		System.out.println("LR");
+		//System.out.println("LR");
 		Node x = z.left();
 		Node y = x.right();
 
@@ -926,7 +927,7 @@ public class Tree {
 	 * @param flip whether to flip colors as with inserts
 	 */
 	public void rightLeftRotate(Node z, boolean flip) {
-		System.out.println("RL");
+		//System.out.println("RL");
 		Node x = z.right();
 		Node y = x.left();
 

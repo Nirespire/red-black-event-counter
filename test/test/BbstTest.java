@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import redBlackBST.Node;
-import util.KeyValuePair;
 import util.Util;
 
 public class BbstTest {
@@ -19,12 +18,14 @@ public class BbstTest {
 		
 		final int NUM_NODES = 10000000;
 		
-		KeyValuePair[] items = new KeyValuePair[NUM_NODES];
+		int[] keys = new int[NUM_NODES];
+		int[] values = new int[NUM_NODES];
 		for(int i = 1; i <= NUM_NODES; i++){
-			items[i-1] = new KeyValuePair(i, i);
+			keys[i-1] = i;
+			values[i-1] = i;
 		}
 		
-		Node root = Util.buildBBSTFromSortedArray(items, 0, items.length-1);
+		Node root = Util.buildBBSTFromSortedArray(keys, values, 0, keys.length-1);
 		
 		Util.colorDeepestLeafs(root);
 

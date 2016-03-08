@@ -15,10 +15,12 @@ import redBlackBST.Node;
 import redBlackBST.Tree;
 
 public class Util {
+
 	public static Tree readInputFile(String filename) {
-		Tree output = new Tree();
 
 		BufferedReader br = null;
+		int[] keys = null;
+		int[] values = null;
 
 		try {
 
@@ -28,9 +30,13 @@ public class Util {
 
 			int count = Integer.parseInt(br.readLine());
 
+			keys = new int[count];
+			values = new int[count];
+
 			for (int i = 0; i < count; i++) {
 				line = br.readLine().split(" ");
-				output.insert(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+				keys[i] = Integer.parseInt(line[0]);
+				values[i] = Integer.parseInt(line[1]);
 			}
 
 		} catch (IOException e) {
@@ -43,47 +49,18 @@ public class Util {
 				ex.printStackTrace();
 			}
 		}
+		
+		System.out.println("Done reading file");
 
-		return output;
-	}
-
-	public static Tree readInputFile2(String filename) {
-
-		BufferedReader br = null;
-		KeyValuePair[] items = null;
-
-		try {
-
-			String line[];
-
-			br = new BufferedReader(new FileReader(filename));
-
-			int count = Integer.parseInt(br.readLine());
-
-			items = new KeyValuePair[count];
-
-			for (int i = 0; i < count; i++) {
-				line = br.readLine().split(" ");
-				items[i] = new KeyValuePair(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-
-		Node root = Util.buildBBSTFromSortedArray(items, 0, items.length - 1);
+		Node root = Util.buildBBSTFromSortedArray(keys, values, 0, keys.length - 1);
+		
+		System.out.println("Done Building Tree");
+		
 		Util.colorDeepestLeafs(root);
+		
+		System.out.println("Done Coloring Tree");
 
 		Tree output = new Tree(root);
-
-		System.out.println("Done Read");
 
 		return output;
 	}
@@ -228,7 +205,7 @@ public class Util {
 	public static void createHugeInputFile() {
 		try {
 
-			File file = new File("input.exclude.txt");
+			File file = new File("input3.exclude.txt");
 
 			if (!file.exists()) {
 				file.createNewFile();
@@ -236,7 +213,7 @@ public class Util {
 
 			PrintWriter bw = new PrintWriter(file.getAbsoluteFile());
 
-			int numElements = 150000 * 1000;
+			int numElements = 150000 * 300;
 			bw.println(numElements);
 
 			for (int i = 1; i <= numElements; i++) {
@@ -252,16 +229,17 @@ public class Util {
 		}
 	}
 
-	public static Node buildBBSTFromSortedArray(KeyValuePair[] items, int start, int end) {
+	public static Node buildBBSTFromSortedArray(int[] keys, int[] values, int start, int end) {
 		if (start > end) {
 			return null;
 		}
 
 		int mid = (start + end) / 2;
-		Node root = new Node(items[mid].key, items[mid].value);
-
-		Node left = buildBBSTFromSortedArray(items, start, mid - 1);
-		Node right = buildBBSTFromSortedArray(items, mid + 1, end);
+		
+		Node left = buildBBSTFromSortedArray(keys, values, start, mid - 1);
+		Node right = buildBBSTFromSortedArray(keys, values, mid + 1, end);
+		
+		Node root = new Node(keys[mid], values[mid]);
 
 		root.setLeft(left);
 		if (left != null) {
