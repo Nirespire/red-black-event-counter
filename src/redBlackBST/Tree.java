@@ -27,6 +27,7 @@ public class Tree {
 
 	/**
 	 * Constructs a new node with given key and value and inserts it into the Tree
+	 * If the id exists, update the Node value
 	 * 
 	 * @param id key
 	 * @param value value
@@ -38,6 +39,7 @@ public class Tree {
 
 		while (current != null) {
 			if (current.getKey() == id) {
+				current.setValue(value);
 				return;
 			} else if (current.getKey() < id) {
 				parent = current;
