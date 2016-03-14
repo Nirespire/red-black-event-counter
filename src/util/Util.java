@@ -14,8 +14,21 @@ import java.util.List;
 import redBlackBST.Node;
 import redBlackBST.Tree;
 
+/**
+ * 
+ * @author Sanjay Nair
+ *
+ */
 public class Util {
 
+	/**
+	 * Constructs a Tree from the provided file assuming it is 
+	 * in the proper format and the keys are in non-decreasing,
+	 * sorted order.
+	 * 
+	 * @param filename filename containing sorted keys and values
+	 * @return Red-Black Tree containing provided keys and values
+	 */
 	public static Tree readInputFile(String filename) {
 
 		BufferedReader br = null;
@@ -65,6 +78,11 @@ public class Util {
 		return output;
 	}
 
+	/**
+	 * DEBUG. Prints out roughly formatted Tree.
+	 * 
+	 * @param root root of tree to be printed
+	 */
 	public static void printTree(Node root) {
 		if (root == null) {
 			return;
@@ -75,6 +93,12 @@ public class Util {
 		printTree(root.right());
 	}
 
+	/**
+	 * DEBUG. Prints out roughly formatted Tree.
+	 * 
+	 * @param root root of Tree to be printed
+	 * @param indent recursive parameter to further indent deeper node keys and values
+	 */
 	public static void printTree2(Node root, int indent) {
 
 		for (int i = 0; i < indent; i++) {
@@ -92,6 +116,14 @@ public class Util {
 		printTree2(root.right(), indent + 1);
 	}
 
+	/**
+	 * Validates whether the Tree rooted at the input adheres to
+	 * the unbalanced Binary Search Tree properties. Does not test for any
+	 * other rules.
+	 * 
+	 * @param root root of Binary Tree to be validated
+	 * @return valid BST
+	 */
 	public static boolean checkValidBST(Node root) {
 		if (root == null) {
 			return true;
@@ -121,6 +153,13 @@ public class Util {
 		return leftValid && rightValid;
 	}
 
+	/**
+	 * Validates whether the Tree rooted at the input adheres to
+	 * all the properties of a Red-Black Tree.
+	 * 
+	 * @param root root of Red-Black Tree to be validated
+	 * @return RB Tree valid
+	 */
 	public static boolean checkValidRbBST(Node root) {
 
 		boolean one = verifyProperty1(root);
@@ -147,8 +186,14 @@ public class Util {
 		return one && two && four;
 	}
 
-	// Property 1
-	// All nodes RED or BLACK
+
+	/**
+	 * Red-Black Property 1:
+	 * All nodes are RED or BLACK.
+	 * 
+	 * @param n root of Tree to validate
+	 * @return valid Tree for property 1
+	 */
 	public static boolean verifyProperty1(Node n) {
 		if (n == null)
 			return true;
@@ -156,14 +201,24 @@ public class Util {
 		return redOrBlack && verifyProperty1(n.left()) && verifyProperty1(n.right());
 	}
 
-	// Property 2
-	// root is BLACK
+	/**
+	 * Red-Black Property 2:
+	 * Root is BLACK.
+	 * 
+	 * @param root root of Tree to validate
+	 * @return valid Tree for property 2
+	 */
 	public static boolean verifyProperty2(Node root) {
 		return root == null || root.getColor() == BLACK;
 	}
 
-	// Property 4
-	// No 2 RED nodes together
+	/**
+	 * Red-Black Property 2:
+	 * No 2 RED Nodes are next to each other.
+	 * 
+	 * @param n root of Tree to validate
+	 * @return valid Tree for property 3
+	 */
 	public static boolean verifyProperty4(Node n) {
 		if (n == null || n.getColor() == BLACK)
 			return true;
@@ -175,12 +230,27 @@ public class Util {
 		}
 	}
 
-	// Property 5
-	// All paths to external nodes should pass the same number of BLACK nodes
+	/**
+	 * Red-Black Property 5:
+	 * All paths to external nodes should pass the same number of BLACK nodes.
+	 * 
+	 * @param root root of Tree to validate
+	 * @throws Exception BLACK height violation
+	 */
 	public static void verifyProperty5(Node root) throws Exception {
 		verifyProperty5Helper(root, 0, -1);
 	}
 
+	/**
+	 * Recursive helper for verifyProperty5
+	 * 
+	 * @param n n root of Tree to validate
+	 * @param blackCount current BLACK height
+	 * @param pathBlackCount current BLACK height along this subtree path
+	 * @return recursive BLACK height
+	 * @throws Exception BLACK height violation
+	 * @see Util#verifyProperty5(Node)
+	 */
 	private static int verifyProperty5Helper(Node n, int blackCount, int pathBlackCount) throws Exception {
 		if (n == null) {
 			if (pathBlackCount == -1) {
@@ -202,33 +272,16 @@ public class Util {
 		return pathBlackCount;
 	}
 
-	public static void createHugeInputFile() {
-		try {
-
-			File file = new File("input3.exclude.txt");
-
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			PrintWriter bw = new PrintWriter(file.getAbsoluteFile());
-
-			int numElements = 150000 * 300;
-			bw.println(numElements);
-
-			for (int i = 1; i <= numElements; i++) {
-				bw.println(i + " " + i);
-			}
-
-			bw.close();
-
-			System.out.println("Done");
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	/**
+	 * Recursively constructs a Balanced Binary Search Tree from a sorted
+	 * input list of keys and values.
+	 * 
+	 * @param keys array of integer keys
+	 * @param values array of integer values corresponding to keys
+	 * @param start start index inclusive
+	 * @param end end index non-inclusive
+	 * @return root Node of constructed BBST
+	 */
 	public static Node buildBBSTFromSortedArray(int[] keys, int[] values, int start, int end) {
 		if (start > end) {
 			return null;
@@ -254,6 +307,12 @@ public class Util {
 		return root;
 	}
 
+	/**
+	 * Colors the Nodes RED at the deepest level of Tree
+	 * rooted at input.
+	 * 
+	 * @param root root of Tree to be colored
+	 */
 	public static void colorDeepestLeafs(Node root) {
 		List<Node> nodes = Util.findDeepestNodes(root);
 
@@ -262,50 +321,75 @@ public class Util {
 		}
 	}
 
-	public static List findDeepestNodes(Node root) {
+	/**
+	 * Returns a list of Nodes at the deepest level in a Tree
+	 * rooted at the input.
+	 * 
+	 * @param root root of Tree to be searched
+	 * @return List of Nodes at deepest level in the Tree
+	 */
+	public static List<Node> findDeepestNodes(Node root) {
 		Object[] levelNodes = new Object[2];
 		levelNodes[0] = 0;
-		levelNodes[1] = new ArrayList();
-		findDeepestNodes(root, 1, levelNodes);
-		return (List) levelNodes[1];
+		levelNodes[1] = new ArrayList<Node>();
+		findDeepestNodesHelper(root, 1, levelNodes);
+		return (List<Node>) levelNodes[1];
 	}
 
-	private static void findDeepestNodes(Node root, int level, Object[] levelNodes) {
+	/**
+	 * Recursive helper to collect and return the Nodes at the deepest
+	 * level in a Tree rooted at the input.
+	 * 
+	 * Note: generic Object casting is used to preserve Node references 
+	 * when function returns.
+	 * 
+	 * @param root root of Tree currently being searched
+	 * @param level current level being searched
+	 * @param levelNodes Object array where levelNode[0] holds an integer corresponding to the level of the ArrayList of Nodes held in levelNode[1]
+	 */
+	private static void findDeepestNodesHelper(Node root, int level, Object[] levelNodes) {
 		if (root == null)
 			return;
 		if ((Integer) levelNodes[0] <= level) {
 			if ((Integer) levelNodes[0] < level) {
-				((List) levelNodes[1]).clear();
+				((List<Node>) levelNodes[1]).clear();
 			}
 			levelNodes[0] = level;
-			((List) levelNodes[1]).add(root);
+			((List<Node>) levelNodes[1]).add(root);
 		}
-		findDeepestNodes(root.left(), level + 1, levelNodes);
-		findDeepestNodes(root.right(), level + 1, levelNodes);
+		findDeepestNodesHelper(root.left(), level + 1, levelNodes);
+		findDeepestNodesHelper(root.right(), level + 1, levelNodes);
 	}
+	
+	/**
+	 * DEBUG. Generates a large input file in the specific format for
+	 * testing file reading and initial Tree construction performance.
+	 */
+	public static void createHugeInputFile() {
+		try {
 
-	public boolean validateNode(Node n) {
-		boolean isValid = true;
+			File file = new File("input3.exclude.txt");
 
-		if (n.parent() != null) {
-			boolean isRight = (n.parent().right() == n ? true : false);
-
-			if (isRight) {
-				isValid = isValid && n.parent().getKey() < n.getKey();
-			} else {
-				isValid = isValid && n.parent().getKey() > n.getKey();
+			if (!file.exists()) {
+				file.createNewFile();
 			}
-		}
 
-		if (n.right() != null) {
-			isValid = isValid && n.right().getKey() > n.getKey();
-		}
+			PrintWriter bw = new PrintWriter(file.getAbsoluteFile());
 
-		if (n.left() != null) {
-			isValid = isValid && n.left().getKey() < n.getKey();
-		}
+			int numElements = 150000 * 300;
+			bw.println(numElements);
 
-		return isValid;
+			for (int i = 1; i <= numElements; i++) {
+				bw.println(i + " " + i);
+			}
+
+			bw.close();
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

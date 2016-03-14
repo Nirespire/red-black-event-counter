@@ -5,6 +5,12 @@ import static util.Color.RED;
 
 import util.Pair;
 
+/**
+ * @author Sanjay Nair
+ * 
+ * Implementation of a Red-Black Tree.
+ *
+ */
 public class Tree {
 	public Node root;
 
@@ -12,12 +18,19 @@ public class Tree {
 		this.root = null;
 	}
 	
+	/**
+	 * Constructs a Red-Black tree with the specified root,
+	 * assuming that all other elements are properly balanced
+	 * and colored.
+	 * 
+	 * @param root root of Red-Black Tree with all remaining Nodes properly colored and balanced
+	 */
 	public Tree(Node root){
 		this.root = root;
 	}
 
 	/**
-	 * Constructs a new node with key = value = val and inserts it into the Tree
+	 * Constructs a new node with key = value = val and inserts it into the Tree.
 	 * 
 	 * @param val will be used as both key and value for the new Node
 	 */
@@ -26,8 +39,8 @@ public class Tree {
 	}
 
 	/**
-	 * Constructs a new node with given key and value and inserts it into the Tree
-	 * If the id exists, update the Node value
+	 * Constructs a new node with given key and value and inserts it into the Tree.
+	 * If the id exists, update the Node value.
 	 * 
 	 * @param id key
 	 * @param value value
@@ -68,7 +81,7 @@ public class Tree {
 	}
 
 	/**
-	 * Checks and fixes integrity of Red-Black properties after insertion
+	 * Checks and fixes integrity of Red-Black properties after insertion.
 	 * 
 	 * @param reference newly inserted Node
 	 */
@@ -272,7 +285,7 @@ public class Tree {
 	 * Returns null if no next exists.
 	 * Provided id does not need to exist in the tree.
 	 * 
-	 * @param id key for which a Node with next lower key will be found. Does not need to exist in the Tree.
+	 * @param id key for which a Node with next lower key will be found. Does not need to exist in the Tree
 	 * @return Node with max ID lesser than input
 	 */
 	public Node getPreviousNode(int id){
@@ -705,7 +718,7 @@ public class Tree {
 	}
 
 	/**
-	 * Return node with min key in subtree rooted at input node
+	 * Return node with min key in subtree rooted at input node.
 	 * 
 	 * @param root root Node of subtree to be searched
 	 * @return Node with the min key
@@ -723,7 +736,7 @@ public class Tree {
 	}
 	
 	/**
-	 * Return node with max key in subtree rooted at input node
+	 * Return node with max key in subtree rooted at input node.
 	 * 
 	 * @param root root Node of subtree to be searched
 	 * @return Node with the max key
@@ -788,10 +801,11 @@ public class Tree {
 
 	/**
 	 * Basic LL rotation about z.
-	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * Flip specifies if RB color flipping is necessary, as with inserts.
 	 * 
 	 * @param z central Node of rotation
 	 * @param flip whether to flip colors as with inserts
+	 * @return root Node with respect to the rotation
 	 */
 	public Node leftRotate(Node z, boolean flip) {
 		//System.out.println("L");
@@ -829,10 +843,11 @@ public class Tree {
 
 	/**
 	 * Basic RR rotation about z.
-	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * Flip specifies if RB color flipping is necessary, as with inserts.
 	 * 
 	 * @param z central Node of rotation
 	 * @param flip whether to flip colors as with inserts
+	 * @return root Node with respect to the rotation
 	 */
 	public Node rightRotate(Node z, boolean flip) {
 		//System.out.println("R");
@@ -876,7 +891,7 @@ public class Tree {
 
 	/**
 	 * Basic LR rotation about z.
-	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * Flip specifies if RB color flipping is necessary, as with inserts.
 	 * 
 	 * @param z central Node of rotation
 	 * @param flip whether to flip colors as with inserts
@@ -923,7 +938,7 @@ public class Tree {
 
 	/**
 	 * Basic RL rotation about z.
-	 * Flip specifies if RB color flipping is necessary, as with inserts
+	 * Flip specifies if RB color flipping is necessary, as with inserts.
 	 * 
 	 * @param z central Node of rotation
 	 * @param flip whether to flip colors as with inserts
@@ -968,7 +983,7 @@ public class Tree {
 	}
 	
 	/**
-	 * Used for custom rotations necessary for Rr(1) case 2 and RR(2) delete re-balances
+	 * Used for custom rotations necessary for Rr(1) case 2 and RR(2) delete re-balances.
 	 * 
 	 * @param py parent of deficient subtree y
 	 * @param v sibling of y
@@ -1010,7 +1025,7 @@ public class Tree {
 	}
 	
 	/**
-	 * Used for custom rotations necessary for Lr(1) case 2 and Lr(2) delete re-balances
+	 * Used for custom rotations necessary for Lr(1) case 2 and Lr(2) delete re-balances.
 	 * 
 	 * @param py parent of deficient subtree y
 	 * @param v sibling of y
@@ -1051,6 +1066,14 @@ public class Tree {
 		py.setParent(x);
 	}
 	
+	/**
+	 * Returns the sum of values contained in keys in the range [id1, id2]
+	 * where id1 &le; id2.
+	 * 
+	 * @param id1 lower bound for key, inclusive. id1 &le; id2.
+	 * @param id2 upper bound for key, inclusive. id2 &ge; id1.
+	 * @return sum of values contained in range
+	 */
 	public int inRange(int id1, int id2){
 		if(id2 < id1){
 			return 0;
@@ -1060,6 +1083,15 @@ public class Tree {
 		
 	}
 	
+	/**
+	 * Recursive helper function for inRange.
+	 * 
+	 * @param root root of subtree being recursively traversed
+	 * @param id1 lower bound for key, inclusive. id1 &le; id2.
+	 * @param id2 upper bound for key, inclusive. id2 &ge; id1.
+	 * @return recursive sum of values in range of keys [id1, id2]
+	 * @see Tree#inRange(int, int)
+	 */
 	private int inRangeHelper(Node root, int id1, int id2){
 		if(root == null){
 			return 0;
