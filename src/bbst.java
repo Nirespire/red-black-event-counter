@@ -16,8 +16,6 @@ public class bbst {
 
 	public static void main(String[] args) {
 		
-		//Util.createHugeInputFile();
-		
 		String filename;
 		Scanner input = new Scanner(System.in);
 
