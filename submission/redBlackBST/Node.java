@@ -3,6 +3,12 @@ package redBlackBST;
 import util.Color;
 import static util.Color.*;
 
+/**
+ * Non-generic Node object. Holds integer keys and values.
+ * 
+ * @author Sanjay Nair
+ *
+ */
 public class Node {
 	private int key;
 	private int value;

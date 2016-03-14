@@ -3,14 +3,11 @@ import redBlackBST.Node;
 import redBlackBST.Tree;
 import util.Util;
 
-/*
- * QUESTIONS FOR TA
- * 
- * For Next(theID) and Previous(theID), can we assume theID exists in the tree?
- * 
- * Same for inRange(id1, id2) can we assume both ids exist
- * 
- * When are we getting the input file
+/**
+ * @author: Sanjay Nair
+ * COP 5536 - Advanced Data Structures
+ * Spring 2016
+ * Event counter implemented through a Red-Black Tree
  */
 
 public class bbst {

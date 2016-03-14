@@ -9,7 +9,6 @@ CLASSES = \
 	redBlackBST/Node.java \
 	redBlackBST/Tree.java \
 	util/Color.java \
-	util/KeyValuePair.java \
 	util/Pair.java \
 	util/Util.java
 
