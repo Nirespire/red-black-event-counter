@@ -63,15 +63,15 @@ public class Util {
 			}
 		}
 		
-		System.out.println("Done reading file");
+		//System.out.println("Done reading file");
 
 		Node root = Util.buildBBSTFromSortedArray(keys, values, 0, keys.length - 1);
 		
-		System.out.println("Done Building Tree");
+		//System.out.println("Done Building Tree");
 		
 		Util.colorDeepestLeafs(root);
 		
-		System.out.println("Done Coloring Tree");
+		//System.out.println("Done Coloring Tree");
 
 		Tree output = new Tree(root);
 

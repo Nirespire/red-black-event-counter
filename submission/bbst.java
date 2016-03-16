@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import redBlackBST.Node;
 import redBlackBST.Tree;
@@ -16,28 +17,32 @@ public class bbst {
 
 	public static void main(String[] args) {
 		
-		//Util.createHugeInputFile();
-		
 		String filename;
 		Scanner input = new Scanner(System.in);
 
 		if (args.length > 0) {
 			filename = args[0];
-			System.out.println("Input filename: " + filename);
+			//System.out.println("Input filename: " + filename);
 		} else {
-			System.out.println("Input filename: ");
+			//System.out.println("Input filename: ");
 			filename = input.next();
 		}
 
 		t = Util.readInputFile(filename);
 		
-		System.out.println("You may begin entering commands. Type \"exit\" to terminate program.");
-		System.out.println("________________________________________");
+		//System.out.println("You may begin entering commands. Type \"exit\" to terminate program.");
+		//System.out.println("________________________________________");
 		
 		String userInput;
 
 		while (true) {
-			userInput = input.nextLine();
+			try{
+				userInput = input.nextLine();
+			}
+			catch(NoSuchElementException e){
+				input.close();
+				return;
+			}
 
 			if (userInput.equals("exit")) {
 				input.close();
